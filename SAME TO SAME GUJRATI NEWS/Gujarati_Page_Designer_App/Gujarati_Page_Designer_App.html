@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ગુજરાત સમાચાર (10 Pages Same-to-Same) — Page Designer Live Re-Draw &amp; Multi-Column Editorial Studio</title>
+<style>
+  :root {
+    --bg: #f1f5f9;
+    --surface: #ffffff;
+    --surface-alt: #f8fafc;
+    --ink: #0f172a;
+    --ink-soft: #334155;
+    --ink-muted: #64748b;
+    --border: #cbd5e1;
+    --border-light: #e2e8f0;
+    --primary: #1d4ed8;
+    --primary-hover: #1e40af;
+    --primary-soft: #eff6ff;
+    --crimson: #dc2626;
+    --crimson-hover: #b91c1c;
+    --crimson-soft: #fef2f2;
+    --emerald: #059669;
+    --emerald-hover: #047857;
+    --emerald-soft: #ecfdf5;
+    --amber: #d97706;
+    --amber-soft: #fffbeb;
+    --purple: #7c3aed;
+    --purple-soft: #f5f3ff;
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.07);
+    --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.12);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Segoe UI', 'Noto Sans Gujarati', 'Shruti', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ==========================================================================
+     TOP STUDIO HEADER BAR
+     ========================================================================== */
+  .top-header {
+    background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #334155;
+    z-index: 50;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .brand-pill {
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    color: #fff;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 5px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+  }
+
+  .brand-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    color: #cbd5e1;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  .auto-redraw-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.18);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    padding: 5px 10px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #a7f3d0;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .auto-redraw-toggle input {
+    accent-color: #10b981;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
+
+  .speed-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 4px 8px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+
+  .speed-box input {
+    width: 48px;
+    background: #0f172a;
+    color: #fff;
+    border: 1px solid #475569;
+    border-radius: 5px;
+    padding: 2px 4px;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .btn {
+    border: 1px solid transparent;
+    border-radius: 7px;
+    padding: 6px 11px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.14s ease;
+    white-space: nowrap;
+  }
+
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: wait;
+  }
+
+  .btn-gallery {
+    background: #334155;
+    color: #ffffff;
+    border-color: #475569;
+  }
+  .btn-gallery:hover:not(:disabled) {
+    background: #475569;
+  }
+
+  .btn-live {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
+  }
+  .btn-live:hover:not(:disabled) {
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+  }
+
+  .btn-script {
+    background: #d97706;
+    color: #ffffff;
+  }
+  .btn-script:hover:not(:disabled) {
+    background: #b45309;
+  }
+
+  .btn-live-all {
+    background: #7c3aed;
+    color: #ffffff;
+  }
+  .btn-live-all:hover:not(:disabled) {
+    background: #6d28d9;
+  }
+
+  .btn-save-live {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  }
+  .btn-save-live:hover:not(:disabled) {
+    background: #047857;
+  }
+
+  .btn-save-quick {
+    background: var(--primary);
+    color: #ffffff;
+  }
+  .btn-save-quick:hover:not(:disabled) {
+    background: var(--primary-hover);
+  }
+
+  .btn-outline {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--border);
+  }
+  .btn-outline:hover:not(:disabled) {
+    background: var(--surface-alt);
+    border-color: var(--ink-soft);
+  }
+
+  /* ==========================================================================
+     3-EDITION TOP MENU BAR (1. GUJARATI | 2. HINDI | 3. ENGLISH)
+     ========================================================================== */
+  .edition-menu-bar {
+    background: #0f172a;
+    border-bottom: 1px solid #334155;
+    padding: 5px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .edition-tabs-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .edition-menu-label {
+    font-size: 11px;
+    font-weight: 900;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+  }
+
+  .edition-tab-btn {
+    background: #1e293b;
+    color: #cbd5e1;
+    border: 1.5px solid #475569;
+    border-radius: 7px;
+    padding: 5px 13px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.14s ease;
+  }
+
+  .edition-tab-btn:hover {
+    background: #334155;
+    color: #ffffff;
+    border-color: #94a3b8;
+  }
+
+  .edition-tab-btn.active {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #ffffff;
+    border-color: #f87171;
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.45);
+  }
+
+  .edition-badge-num {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-size: 10.5px;
+    font-weight: 900;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* ==========================================================================
+     10-PAGE NAVIGATION RIBBON (CLICK ANY PAGE -> RE-DRAWS IN PAGE DESIGNER)
+     ========================================================================== */
+  .page-ribbon {
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    flex-shrink: 0;
+  }
+
+  .page-tab {
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 9px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    transition: all 0.14s ease;
+    min-width: 142px;
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  .page-tab:hover {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+  }
+
+  .page-tab.active {
+    border-color: var(--crimson);
+    background: #fff1f2;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
+  }
+
+  .page-tab-num {
+    background: var(--ink);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 3px 6px;
+    border-radius: 5px;
+  }
+
+  .page-tab.active .page-tab-num {
+    background: var(--crimson);
+  }
+
+  .page-tab-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .page-tab-sec {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .page-tab-counts {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--ink-muted);
+  }
+
+  .page-tab-live-btn {
+    background: var(--crimson-soft);
+    color: var(--crimson);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    border-radius: 5px;
+    padding: 3px 6px;
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.14s ease;
+  }
+
+  .page-tab-live-btn:hover {
+    background: var(--crimson);
+    color: #fff;
+  }
+
+  /* ==========================================================================
+     SPLIT-SCREEN STUDIO WORKSPACE (LEFT 37% LIVE PREVIEW + RIGHT 63% COLUMNS)
+     ========================================================================== */
+  .workspace {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 37% 63%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* LEFT PANE: LIVE BROADSHEET DUMMY VIEWER */
+  .preview-pane {
+    background: #1e293b;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #334155;
+    min-height: 0;
+    position: relative;
+  }
+
+  .preview-toolbar {
+    height: 40px;
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid #334155;
+    flex-shrink: 0;
+  }
+
+  .preview-page-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #e2e8f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .zoom-btn {
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #475569;
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .zoom-btn:hover, .zoom-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .preview-canvas-wrap {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .preview-img {
+    background: #fff;
+    padding: 4px;
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    transition: width 0.14s ease;
+  }
+
+  /* ==========================================================================
+     RIGHT PANE: MULTI-COLUMN EDITORIAL EDITOR
+     (HEADLINE | SUBHEAD | BYLINE & INTRO | PHOTO & CAPTION | BODY COPY)
+     ========================================================================== */
+  .editor-pane {
+    background: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .story-nav-bar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex-shrink: 0;
+  }
+
+  .story-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .story-nav-title {
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .status-chip {
+    background: var(--emerald-soft);
+    color: var(--emerald);
+    border: 1px solid #a7f3d0;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .status-chip.dirty {
+    background: var(--amber-soft);
+    color: var(--amber);
+    border-color: #fde68a;
+  }
+
+  .search-input {
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 250px;
+    outline: none;
+  }
+  .search-input:focus {
+    border-color: var(--primary);
+  }
+
+  .story-pills-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .story-pill {
+    background: #f8fafc;
+    color: var(--ink-soft);
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 5px 10px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.13s ease;
+  }
+  .story-pill:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .story-pill.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+  .story-pill.special-pill {
+    background: #fffbeb;
+    color: #92400e;
+    border-color: #fde68a;
+  }
+  .story-pill.special-pill.active {
+    background: #d97706;
+    color: #fff;
+    border-color: #d97706;
+  }
+
+  .stories-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .story-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 11px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .story-card-header {
+    background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .story-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .slot-badge {
+    background: var(--crimson);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 900;
+    padding: 3px 8px;
+    border-radius: 5px;
+    letter-spacing: 0.04em;
+  }
+
+  .slot-title {
+    font-size: 13.5px;
+    font-weight: 900;
+    color: var(--ink);
+  }
+
+  .zone-badge {
+    background: #e2e8f0;
+    color: #334155;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 5px;
+  }
+
+  .story-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .story-body-layout {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* 4-COLUMN ROLE GRID FOR HEADLINE | SUBHEAD | BYLINE & INTRO | PHOTO & CAPTION */
+  .role-columns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    gap: 10px;
+    align-items: start;
+  }
+
+  .role-column-box {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 9px;
+    padding: 9px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .role-column-box.col-headline {
+    background: #fff1f2;
+    border-color: #fecdd3;
+  }
+  .role-column-box.col-subhead {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+  }
+  .role-column-box.col-byline-intro {
+    background: #fffbeb;
+    border-color: #fde68a;
+  }
+  .role-column-box.col-photo-caption {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+  }
+
+  .role-column-header {
+    font-size: 11.5px;
+    font-weight: 900;
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .col-headline .role-column-header {
+    background: #dc2626;
+    color: #fff;
+  }
+  .col-subhead .role-column-header {
+    background: #1d4ed8;
+    color: #fff;
+  }
+  .col-byline-intro .role-column-header {
+    background: #d97706;
+    color: #fff;
+  }
+  .col-photo-caption .role-column-header {
+    background: #059669;
+    color: #fff;
+  }
+
+  .meta-col-card {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+
+  .meta-col-card.field-modified,
+  .body-frame-card.field-modified {
+    border-color: #f59e0b !important;
+    background: #fffbeb !important;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+  }
+
+  .col-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .field-role-tag {
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .field-role-tag.role-headline { background: #fee2e2; color: #991b1b; }
+  .field-role-tag.role-subhead { background: #dbeafe; color: #1e40af; }
+  .field-role-tag.role-byline { background: #fef3c7; color: #92400e; }
+  .field-role-tag.role-intro { background: #ffedd5; color: #9a3412; }
+  .field-role-tag.role-caption { background: #d1fae5; color: #065f46; }
+  .field-role-tag.role-photo { background: #ede9fe; color: #5b21b6; }
+  .field-role-tag.role-body { background: #e0e7ff; color: #1e3a8a; }
+  .field-role-tag.role-masthead { background: #e2e8f0; color: #0f172a; }
+
+  .word-counter-badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ink-muted);
+  }
+
+  .col-typo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    background: #f8fafc;
+    padding: 3px 6px;
+    border-radius: 5px;
+  }
+
+  .typo-mini-inputs {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .typo-mini-inputs input {
+    width: 46px;
+    border: 1px solid #94a3b8;
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: center;
+    background: #fff;
+  }
+
+  .meta-vertical-textarea {
+    width: 100%;
+    font-family: 'Segoe UI', 'Noto Sans Gujarati', 'Shruti', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.48;
+    color: #0f172a;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 7px 9px;
+    outline: none;
+    resize: vertical;
+    min-height: 68px;
+  }
+  .meta-vertical-textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.14);
+  }
+
+  .meta-vertical-textarea.role-headline {
+    font-size: 15px;
+    font-weight: 800;
+    min-height: 76px;
+  }
+  .meta-vertical-textarea.role-subhead {
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+  .meta-vertical-textarea.role-byline {
+    font-size: 13px;
+    font-weight: 800;
+    color: #7c2d12;
+    min-height: 46px;
+  }
+  .meta-vertical-textarea.role-intro {
+    font-size: 13.5px;
+    font-weight: 700;
+    min-height: 82px;
+  }
+
+  /* PHOTO CHANGE CARD */
+  .photo-col-inner {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    padding: 6px;
+  }
+
+  .photo-mini-preview {
+    width: 86px;
+    height: 68px;
+    border-radius: 5px;
+    object-fit: cover;
+    border: 1px solid #94a3b8;
+    background: #0f172a;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .photo-col-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .photo-select {
+    width: 100%;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #cbd5e1;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0f172a;
+    background: #f8fafc;
+  }
+
+  .photo-btn-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .upload-photo-btn {
+    flex: 1;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 10.5px;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .upload-photo-btn:hover {
+    background: #dbeafe;
+  }
+
+  /* BOTTOM FULL-WIDTH BODY COPY SECTION */
+  .body-copy-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .body-copy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 10px;
+  }
+
+  .body-frame-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 2px solid #93c5fd;
+    border-radius: 9px;
+    padding: 9px 11px;
+    box-shadow: 0 3px 10px rgba(29, 78, 216, 0.06);
+  }
+
+  .body-frame-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .body-main-textarea {
+    width: 100%;
+    min-height: 155px;
+    font-family: 'Segoe UI', 'Noto Sans Gujarati', 'Shruti', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.62;
+    color: #0f172a;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 7px;
+    padding: 9px 11px;
+    outline: none;
+    resize: vertical;
+  }
+  .body-main-textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  /* MODALS */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 600;
+    padding: 20px;
+  }
+  .modal-backdrop.open {
+    display: flex;
+  }
+
+  .modal-box {
+    background: var(--surface);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 1320px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  }
+
+  .modal-header {
+    padding: 14px 18px;
+    background: #0f172a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .gallery-grid-5col {
+    flex: 1;
+    min-height: 0;
+    padding: 16px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    background: #f1f5f9;
+  }
+
+  .gallery-card {
+    background: #fff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 11px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .gallery-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--crimson);
+  }
+
+  .gallery-card-head {
+    padding: 7px 10px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .gallery-thumb-wrap {
+    height: 250px;
+    background: #1e293b;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .gallery-thumb-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 3px;
+  }
+
+  .gallery-card-foot {
+    padding: 8px 10px;
+    display: flex;
+    gap: 6px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .modal-grid {
+    flex: 1;
+    min-height: 0;
+    padding: 16px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-auto-rows: 168px;
+    gap: 14px;
+    background: #f1f5f9;
+  }
+
+  .lib-photo-item {
+    height: 168px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+  .lib-photo-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+  .lib-photo-item img {
+    width: 100%;
+    height: 132px;
+    object-fit: cover;
+    background: #0f172a;
+  }
+  .lib-photo-name {
+    height: 32px;
+    padding: 6px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .toast-bar {
+    position: fixed;
+    bottom: 18px;
+    right: 22px;
+    background: #0f172a;
+    color: #fff;
+    border-left: 5px solid #10b981;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+    box-shadow: var(--shadow-md);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  .toast-bar.show {
+    display: inline-flex;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP STUDIO HEADER -->
+<header class="top-header">
+  <div class="brand-group">
+    <span class="brand-pill" id="headerBrandPill">INDIAN POST • Port 47898</span>
+    <div style="min-width:0;">
+      <div class="brand-title" id="headerBrandTitle">Same-to-Same 3-Edition Newspaper Studio (Gujarati • Hindi • English — 10 Pages Each)</div>
+      <div class="brand-sub">Switch Between 1. ગુજરાતી (ગુજરાત સમાચાર), 2. हिन्दी (आस-पास), &amp; 3. ENGLISH (INDIAN POST) • Click Any Page (P01–P10) to Re-Draw Live in Page Designer</div>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <label class="auto-redraw-toggle" title="When checked, clicking any Page Tab (P01..P10) automatically re-draws that page live on the Page Designer canvas!">
+      <input type="checkbox" id="autoRedrawOnClick" checked>
+      ⚡ Auto Re-Draw in Page Designer on Page Click
+    </label>
+    <label class="speed-box">
+      Speed (ms):
+      <input type="number" id="buildSpeedInput" value="35" min="15" max="250" step="5">
+    </label>
+    <button class="btn btn-gallery" onclick="openGalleryModal()">
+      📑 All 10 Pages Gallery
+    </button>
+    <button class="btn btn-live" onclick="triggerLiveBuildCurrentPage('redraw')">
+      ⚡ Re-Draw Page <span id="btnCurPageNum">01</span> in Page Designer
+    </button>
+    <button class="btn btn-script" onclick="triggerLiveBuildCurrentPage('script')" title="Run build_page_XX_same_to_same.py from scratch in Page Designer">
+      🔨 Script Re-Build
+    </button>
+    <button class="btn btn-live-all" onclick="triggerLiveBuildAllPages()">
+      🎬 Live Re-Draw All 10 Pages
+    </button>
+    <button class="btn btn-save-live" id="btnSaveAndLive" onclick="saveCurrentPageEdits(true)">
+      💾 Save &amp; Live Re-Draw in PD
+    </button>
+    <button class="btn btn-save-quick" id="btnSaveQuick" onclick="saveCurrentPageEdits(false)">
+      ✓ Quick Save
+    </button>
+  </div>
+</header>
+
+<!-- 3-EDITION MENU BAR (1. GUJARATI | 2. HINDI | 3. ENGLISH) -->
+<div class="edition-menu-bar">
+  <div class="edition-tabs-group">
+    <span class="edition-menu-label">📰 Select &amp; Live-Run Edition (10 Pages):</span>
+    <button class="edition-tab-btn" id="edBtn_gujarati" onclick="switchEdition('gujarati')">
+      <span class="edition-badge-num">MENU 1</span>
+      <span>ગુજરાતી — ગુજરાત સમાચાર (10 Pages)</span>
+      <span class="edition-badge-num" style="background:#dc2626;" onclick="event.stopPropagation(); switchAndLiveRunAll('gujarati')">⚡ Live Run 10</span>
+    </button>
+    <button class="edition-tab-btn" id="edBtn_hindi" onclick="switchEdition('hindi')">
+      <span class="edition-badge-num">MENU 2</span>
+      <span>हिन्दी — आस-पास (10 Pages)</span>
+      <span class="edition-badge-num" style="background:#dc2626;" onclick="event.stopPropagation(); switchAndLiveRunAll('hindi')">⚡ Live Run 10</span>
+    </button>
+    <button class="edition-tab-btn active" id="edBtn_english" onclick="switchEdition('english')">
+      <span class="edition-badge-num">MENU 3</span>
+      <span>ENGLISH — INDIAN POST (10 Pages)</span>
+      <span class="edition-badge-num" style="background:#dc2626;" onclick="event.stopPropagation(); switchAndLiveRunAll('english')">⚡ Live Run 10</span>
+    </button>
+    <button class="btn btn-live-all" style="background:linear-gradient(135deg,#059669,#047857); padding:5px 12px;" onclick="triggerAutoRunAll3Editions()">
+      🚀 Auto-Run All 3 Editions (Gujarati → Hindi → English • 30 Pages) in PD
+    </button>
+  </div>
+  <div style="font-size:11px; font-weight:800; color:#a7f3d0;" id="activeEditionStatusLabel">
+    Active Edition: 3. ENGLISH — INDIAN POST (Shaily Calligraphic Masthead • WebP Fast Assets)
+  </div>
+</div>
+
+<!-- 10-PAGE NAVIGATION RIBBON -->
+<nav class="page-ribbon" id="pageRibbon"></nav>
+
+<!-- SPLIT WORKSPACE -->
+<main class="workspace">
+  <!-- LEFT PANE: INTERACTIVE HIGH-RES DUMMY PREVIEW -->
+  <section class="preview-pane">
+    <div class="preview-toolbar">
+      <div class="preview-page-label" id="previewHeaderTitle">PAGE 01 — પહેલું પાનું (FRONT PAGE)</div>
+      <div class="zoom-controls">
+        <button class="zoom-btn active" onclick="setZoom('fit', this)">Fit</button>
+        <button class="zoom-btn" onclick="setZoom('100%', this)">100%</button>
+        <button class="zoom-btn" onclick="setZoom('145%', this)">145%</button>
+        <button class="zoom-btn" onclick="setZoom('190%', this)">190%</button>
+        <button class="btn btn-live" style="padding:3px 9px; font-size:10.5px;" onclick="triggerLiveBuildCurrentPage('redraw')">
+          ⚡ Re-Draw in PD
+        </button>
+      </div>
+    </div>
+    <div class="preview-canvas-wrap" id="previewCanvasWrap">
+      <img id="livePreviewImg" class="preview-img" src="" alt="Live Page Designer Preview">
+    </div>
+  </section>
+
+  <!-- RIGHT PANE: MULTI-COLUMN EDITORIAL EDITOR -->
+  <section class="editor-pane">
+    <div class="story-nav-bar">
+      <div class="story-nav-header">
+        <div class="story-nav-title">
+          <span>📝 MULTI-COLUMN STORY EDITOR (Headline • Subhead • Byline • Intro • Photo Change • Caption • Body Copy)</span>
+          <span class="status-chip" id="editStatusChip">🟢 All Changes Saved</span>
+        </div>
+        <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search Gujarati text, headline, or story ID..." oninput="onSearchInput()">
+      </div>
+      <div class="story-pills-row" id="storyPillsRow"></div>
+    </div>
+
+    <div class="stories-scroll-area" id="storiesScrollArea"></div>
+  </section>
+</main>
+
+<!-- 10-PAGE BROADSHEET GALLERY MODAL -->
+<div class="modal-backdrop" id="galleryModal" onclick="closeGalleryModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <div style="font-size:15px; font-weight:900;">📑 ગુજરાત સમાચાર — All 10 Pages Same-to-Same Broadsheet Gallery</div>
+        <div style="font-size:11.5px; color:#cbd5e1;">Click any page to open its Multi-Column Editor AND watch it re-draw live step-by-step in Page Designer 1.0 (Edit Mode)</div>
+      </div>
+      <button class="btn btn-outline" onclick="closeGalleryModal()">✕ Close Gallery</button>
+    </div>
+    <div class="gallery-grid-5col" id="galleryGrid5Col"></div>
+  </div>
+</div>
+
+<!-- PHOTO LIBRARY PICKER MODAL -->
+<div class="modal-backdrop" id="photoModal" onclick="closePhotoModal()">
+  <div class="modal-box" style="max-width:1120px; height:86vh;" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <div style="font-size:15px; font-weight:900;">🖼️ Select Replacement Photo from Library (ફોટો બદલો)</div>
+        <div style="font-size:11.5px; color:#cbd5e1;">Click any photo below to assign it to Asset <span id="modalTargetAssetId"></span> (automatically smart-cropped to exact frame dimensions)</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <input type="text" id="photoSearchInput" class="search-input" style="min-width:210px; background:#1e293b; color:#fff; border-color:#475569;" placeholder="🔍 Filter photos..." oninput="renderPhotoModalGrid()">
+        <button class="btn btn-save-quick" onclick="closePhotoModal(); triggerPcPhotoUpload(ACTIVE_UPLOAD_ASSET_ID);">📤 Upload from PC</button>
+        <button class="btn btn-outline" onclick="closePhotoModal()">✕ Close</button>
+      </div>
+    </div>
+    <div class="modal-grid" id="modalPhotoGrid"></div>
+  </div>
+</div>
+
+<!-- HIDDEN FILE INPUT FOR PC PHOTO UPLOAD -->
+<input type="file" id="hiddenFileInput" accept=".jpg,.jpeg,.png,.webp" style="display:none" onchange="handleDirectFileUpload(event)">
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast-bar" id="toastBar"></div>
+
+<script>
+  let STUDIO_STATE = { pages: [], library_photos: [] };
+  let CURRENT_EDITION = 'english'; // 'gujarati' | 'hindi' | 'english'
+  let CURRENT_PAGE_NUM = 1;
+  let ACTIVE_SLOT_ID = 'all_slots';
+  let PENDING_STORY_UPDATES = {}; // { story_id: [segments] }
+  let PENDING_PHOTO_UPDATES = {}; // { asset_id: filename }
+  let ACTIVE_UPLOAD_ASSET_ID = null;
+  let GROUPED_SLOTS_CACHE = {}; // { page_num: [slots] }
+  let INITIAL_LOAD_DONE = false;
+
+  const EDITION_META = {
+    gujarati: {
+      pill: 'ગુજરાત સમાચાર • Port 47898',
+      status: 'Active Edition: 1. ગુજરાતી — ગુજરાત સમાચાર (10 Pages Same-to-Same)',
+      searchPlaceholder: '🔍 Search Gujarati text, headline, or story ID...',
+    },
+    hindi: {
+      pill: 'आस-पास (हिन्दी) • Port 47898',
+      status: 'Active Edition: 2. हिन्दी — आस-पास (10 Pages Same-to-Same)',
+      searchPlaceholder: '🔍 Search Hindi text, headline, or story ID...',
+    },
+    english: {
+      pill: 'INDIAN POST (ENGLISH) • Port 47898',
+      status: 'Active Edition: 3. ENGLISH — INDIAN POST (Shaily Calligraphic Masthead • WebP Fast Assets)',
+      searchPlaceholder: '🔍 Search English text, headline, or story ID...',
+    },
+  };
+
+  async function switchEdition(editionKey) {
+    if (!['gujarati', 'hindi', 'english'].includes(editionKey)) return;
+    CURRENT_EDITION = editionKey;
+    ['gujarati', 'hindi', 'english'].forEach(k => {
+      const btn = document.getElementById('edBtn_' + k);
+      if (btn) btn.classList.toggle('active', k === editionKey);
+    });
+    const meta = EDITION_META[editionKey];
+    const pillEl = document.getElementById('headerBrandPill');
+    if (pillEl && meta) pillEl.textContent = meta.pill;
+    const stEl = document.getElementById('activeEditionStatusLabel');
+    if (stEl && meta) stEl.textContent = meta.status;
+    const sbEl = document.getElementById('searchBox');
+    if (sbEl && meta) sbEl.placeholder = meta.searchPlaceholder;
+
+    const autoRedraw = document.getElementById('autoRedrawOnClick')?.checked;
+    showToast(`📰 Switching to ${meta.status}...`);
+    await loadStudioState(true, Boolean(autoRedraw));
+  }
+
+  function showToast(msg, duration = 3800) {
+    const el = document.getElementById('toastBar');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+  }
+
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function countWords(str) {
+    const s = String(str || '').trim();
+    return s ? s.split(/\s+/).filter(Boolean).length : 0;
+  }
+
+  /* ==========================================================================
+     STORY PACKAGE GROUPER FOR GUJARAT SAMACHAR (PAGES 01..10):
+     Groups each page's frames into Story Packages so every story displays
+     its explicit Role Columns on the Right:
+       - Column 1: HEADLINE (હેડલાઇન)
+       - Column 2: SUBHEAD (સબહેડ / કિકર)
+       - Column 3: BYLINE (બાયલાઇન) & INTRO (બોલ્ડ ઇન્ટ્રો)
+       - Column 4: PHOTO CHANGE (ફોટો બદલો) & PHOTO CAPTION (ફોટો કેપ્શન)
+       - Bottom:   BODY COPY (બોડી કોપી / મુખ્ય સમાચાર)
+     ========================================================================== */
+  function buildPageStorySlots(pg) {
+    const texts = pg.texts || [];
+    const photos = pg.photos || [];
+    const usedPhotoIds = new Set();
+    const slots = [];
+
+    const mastheadTexts = texts.filter(t => t.category === 'masthead');
+    const mastheadPhotos = photos.filter(p => p.is_logo);
+    mastheadPhotos.forEach(p => usedPhotoIds.add(p.asset_id));
+
+    const contentTexts = texts.filter(t => t.category !== 'masthead');
+
+    // Group sequential story blocks created by build_page_XX_same_to_same.py
+    let currentSlot = null;
+    let seenBodyInCurrent = false;
+
+    function startNewSlot(firstItem) {
+      const sNum = slots.length + 1;
+      currentSlot = {
+        slot_id: `slot_${sNum}`,
+        slot_num: sNum,
+        slot_badge: sNum === 1 ? 'STORY 01 (LEAD)' : `STORY ${String(sNum).padStart(2, '0')}`,
+        slot_title: firstItem ? firstItem.preview_title : `Story Package ${sNum}`,
+        zone_info: firstItem ? `X=${Math.round(firstItem.bbox[0])}pt, Y=${Math.round(firstItem.bbox[1])}pt` : '',
+        headlines: [],
+        subheads: [],
+        bylines: [],
+        intros: [],
+        photos: [],
+        captions: [],
+        body_frames: [],
+        bbox: firstItem ? [...firstItem.bbox] : [0, 0, 1050, 1490],
+      };
+      slots.push(currentSlot);
+      seenBodyInCurrent = false;
+    }
+
+    contentTexts.forEach(t => {
+      if (!currentSlot) {
+        startNewSlot(t);
+      } else {
+        // Start a new story package when we hit a new Headline (or a new Subhead/Kicker after body columns)
+        const isMajorHeadline = t.category === 'headline' && (seenBodyInCurrent || currentSlot.headlines.length >= 2 || currentSlot.intros.length > 0);
+        const isKickerAfterBody = t.category === 'subhead' && seenBodyInCurrent;
+        if (isMajorHeadline || isKickerAfterBody) {
+          startNewSlot(t);
+        }
+      }
+
+      // Expand slot bounding box
+      currentSlot.bbox[0] = Math.min(currentSlot.bbox[0], t.bbox[0]);
+      currentSlot.bbox[1] = Math.min(currentSlot.bbox[1], t.bbox[1]);
+      currentSlot.bbox[2] = Math.max(currentSlot.bbox[2], t.bbox[2]);
+      currentSlot.bbox[3] = Math.max(currentSlot.bbox[3], t.bbox[3]);
+
+      if (t.category === 'headline') {
+        if (currentSlot.headlines.length === 0) {
+          currentSlot.slot_title = t.preview_title;
+        }
+        currentSlot.headlines.push(t);
+      } else if (t.category === 'subhead') {
+        currentSlot.subheads.push(t);
+      } else if (t.category === 'byline') {
+        currentSlot.bylines.push(t);
+      } else if (t.category === 'intro') {
+        currentSlot.intros.push(t);
+      } else if (t.category === 'caption') {
+        currentSlot.captions.push(t);
+      } else {
+        currentSlot.body_frames.push(t);
+        seenBodyInCurrent = true;
+      }
+    });
+
+    // Attach non-logo photos to the closest overlapping Story Slot
+    const contentPhotos = photos.filter(p => !usedPhotoIds.has(p.asset_id));
+    contentPhotos.forEach(p => {
+      let bestSlot = null;
+      let bestScore = -999999;
+      slots.forEach(sl => {
+        const hOverlap = Math.min(sl.bbox[2], p.bbox[2]) - Math.max(sl.bbox[0], p.bbox[0]);
+        const vOverlap = Math.min(sl.bbox[3] + 60, p.bbox[3]) - Math.max(sl.bbox[1] - 60, p.bbox[1]);
+        const score = hOverlap * 2 + vOverlap;
+        if (score > bestScore) {
+          bestScore = score;
+          bestSlot = sl;
+        }
+      });
+      if (bestSlot) {
+        bestSlot.photos.push(p);
+        usedPhotoIds.add(p.asset_id);
+      } else if (slots.length > 0) {
+        slots[0].photos.push(p);
+        usedPhotoIds.add(p.asset_id);
+      }
+    });
+
+    // Add Running Header / Masthead slot at the end
+    if (mastheadTexts.length > 0 || mastheadPhotos.length > 0) {
+      const sNum = slots.length + 1;
+      slots.push({
+        slot_id: 'masthead_slot',
+        slot_num: sNum,
+        slot_badge: 'HEADER & FOLIO',
+        slot_title: 'Running Header, Masthead, Date & Edition Folio',
+        zone_info: 'Top Masthead / Running Header',
+        headlines: mastheadTexts,
+        subheads: [],
+        bylines: [],
+        intros: [],
+        photos: mastheadPhotos,
+        captions: [],
+        body_frames: [],
+      });
+    }
+
+    return slots;
+  }
+
+  async function loadStudioState(preservePage = true, triggerInitialLive = false) {
+    try {
+      const resp = await fetch(`/api/state?edition=${encodeURIComponent(CURRENT_EDITION)}`);
+      const data = await resp.json();
+      if (!data.ok) throw new Error(data.error || 'Failed to load studio state');
+      STUDIO_STATE = data;
+      GROUPED_SLOTS_CACHE = {};
+      STUDIO_STATE.pages.forEach(pg => {
+        GROUPED_SLOTS_CACHE[pg.page_number] = buildPageStorySlots(pg);
+      });
+      if (!preservePage) CURRENT_PAGE_NUM = 1;
+      PENDING_STORY_UPDATES = {};
+      PENDING_PHOTO_UPDATES = {};
+      updateDirtyIndicator();
+      renderPageRibbon();
+      selectPage(CURRENT_PAGE_NUM, preservePage ? ACTIVE_SLOT_ID : 'all_slots', triggerInitialLive);
+    } catch (err) {
+      showToast('Error loading studio state: ' + err.message, 5000);
+    }
+  }
+
+  function updateDirtyIndicator() {
+    const chip = document.getElementById('editStatusChip');
+    const sCnt = Object.keys(PENDING_STORY_UPDATES).length;
+    const pCnt = Object.keys(PENDING_PHOTO_UPDATES).length;
+    const total = sCnt + pCnt;
+    if (total === 0) {
+      chip.className = 'status-chip';
+      chip.textContent = '🟢 All Changes Saved';
+    } else {
+      chip.className = 'status-chip dirty';
+      chip.textContent = `🟡 ${total} Unsaved Edit(s) — Click Save & Live Re-Draw`;
+    }
+  }
+
+  function renderPageRibbon() {
+    const ribbon = document.getElementById('pageRibbon');
+    ribbon.innerHTML = STUDIO_STATE.pages.map(pg => {
+      const isAct = pg.page_number === CURRENT_PAGE_NUM ? 'active' : '';
+      const pstr = String(pg.page_number).padStart(2, '0');
+      const slots = GROUPED_SLOTS_CACHE[pg.page_number] || [];
+      return `
+        <div class="page-tab ${isAct}" onclick="onPageTabClick(${pg.page_number})">
+          <span class="page-tab-num">P${pstr}</span>
+          <div class="page-tab-info">
+            <div class="page-tab-sec">${escapeHtml(pg.section)}</div>
+            <div class="page-tab-counts">${slots.length} Stories • ${pg.photo_count} Photos</div>
+          </div>
+          <button class="page-tab-live-btn" title="Watch Page ${pstr} re-draw step-by-step live in Page Designer"
+            onclick="event.stopPropagation(); triggerLiveBuildPage(${pg.page_number}, 'redraw')">
+            ⚡ Live
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function onPageTabClick(pageNum) {
+    const autoRedraw = document.getElementById('autoRedrawOnClick')?.checked;
+    selectPage(pageNum, 'all_slots', Boolean(autoRedraw));
+  }
+
+  function selectPage(pageNum, keepSlotId = 'all_slots', triggerLiveRedraw = false) {
+    CURRENT_PAGE_NUM = pageNum;
+    PENDING_STORY_UPDATES = {};
+    PENDING_PHOTO_UPDATES = {};
+    updateDirtyIndicator();
+    renderPageRibbon();
+
+    const pg = STUDIO_STATE.pages.find(p => p.page_number === pageNum);
+    if (!pg) return;
+
+    const pstr = String(pageNum).padStart(2, '0');
+    document.getElementById('btnCurPageNum').textContent = pstr;
+    document.getElementById('previewHeaderTitle').textContent = `${pg.badge} — ${pg.section} (${pg.title})`;
+    document.getElementById('livePreviewImg').src = pg.png_url;
+
+    const slots = GROUPED_SLOTS_CACHE[pageNum] || [];
+    const validSpecial = ['all_slots', 'all_headlines', 'all_bylines_intros', 'all_photos', 'all_body'];
+    if (keepSlotId && (slots.some(s => s.slot_id === keepSlotId) || validSpecial.includes(keepSlotId))) {
+      ACTIVE_SLOT_ID = keepSlotId;
+    } else {
+      ACTIVE_SLOT_ID = 'all_slots';
+    }
+
+    renderStoryPills();
+    renderEditorWorkspace();
+
+    if (triggerLiveRedraw) {
+      triggerLiveBuildPage(pageNum, 'redraw');
+    }
+  }
+
+  function setZoom(mode, btnEl) {
+    document.querySelectorAll('.zoom-btn').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    const img = document.getElementById('livePreviewImg');
+    if (mode === 'fit') {
+      img.style.maxWidth = '100%';
+      img.style.width = 'auto';
+    } else {
+      img.style.maxWidth = 'none';
+      img.style.width = mode;
+    }
+  }
+
+  function renderStoryPills() {
+    const pg = STUDIO_STATE.pages.find(p => p.page_number === CURRENT_PAGE_NUM);
+    if (!pg) return;
+    const slots = GROUPED_SLOTS_CACHE[CURRENT_PAGE_NUM] || [];
+    const row = document.getElementById('storyPillsRow');
+
+    const pillBtns = [];
+    pillBtns.push(`
+      <button class="story-pill ${ACTIVE_SLOT_ID === 'all_slots' ? 'active' : ''}" onclick="selectSlot('all_slots')">
+        📋 All Stories Multi-Column (${slots.length})
+      </button>
+    `);
+
+    slots.forEach((st, idx) => {
+      const isAct = ACTIVE_SLOT_ID === st.slot_id ? 'active' : '';
+      const cleanTitle = st.slot_title.length > 22 ? st.slot_title.slice(0, 21) + '…' : st.slot_title;
+      const prefix = st.slot_id === 'masthead_slot' ? '🏛️ ' : `S${idx + 1}: `;
+      pillBtns.push(`
+        <button class="story-pill ${isAct}" onclick="selectSlot('${st.slot_id}')" title="${escapeHtml(st.slot_title)}">
+          ${escapeHtml(prefix + cleanTitle)}
+        </button>
+      `);
+    });
+
+    pillBtns.push(`
+      <button class="story-pill special-pill ${ACTIVE_SLOT_ID === 'all_headlines' ? 'active' : ''}" onclick="selectSlot('all_headlines')">
+        📰 Headlines &amp; Subheads
+      </button>
+    `);
+    pillBtns.push(`
+      <button class="story-pill special-pill ${ACTIVE_SLOT_ID === 'all_bylines_intros' ? 'active' : ''}" onclick="selectSlot('all_bylines_intros')">
+        ✍️ Bylines &amp; Intros
+      </button>
+    `);
+    pillBtns.push(`
+      <button class="story-pill special-pill ${ACTIVE_SLOT_ID === 'all_photos' ? 'active' : ''}" onclick="selectSlot('all_photos')">
+        🖼️ Photos &amp; Captions (${pg.photos.length})
+      </button>
+    `);
+
+    row.innerHTML = pillBtns.join('');
+  }
+
+  function selectSlot(slotId) {
+    ACTIVE_SLOT_ID = slotId;
+    document.getElementById('searchBox').value = '';
+    renderStoryPills();
+    renderEditorWorkspace();
+  }
+
+  function onSearchInput() {
+    const q = (document.getElementById('searchBox').value || '').trim();
+    if (q && ACTIVE_SLOT_ID !== 'all_slots') {
+      ACTIVE_SLOT_ID = 'all_slots';
+      renderStoryPills();
+    }
+    renderEditorWorkspace();
+  }
+
+  /* ==========================================================================
+     RENDERING EDITABLE CARDS FOR HEADLINE, SUBHEAD, BYLINE, INTRO, PHOTO, CAPTION, BODY
+     ========================================================================== */
+  function renderTextSegmentMetaCard(tEntry, seg, sIdx, customRoleBadge = null, roleClass = 'role-headline') {
+    const activeSegs = PENDING_STORY_UPDATES[tEntry.story_id] || tEntry.segments;
+    const curSeg = activeSegs[sIdx] || seg;
+    const isMod = Boolean(PENDING_STORY_UPDATES[tEntry.story_id]);
+    const wc = countWords(curSeg.text);
+    const badgeLabel = customRoleBadge || curSeg.label || tEntry.role_badge;
+
+    return `
+      <div class="meta-col-card ${isMod ? 'field-modified' : ''}" id="meta_seg_${tEntry.story_id}_${sIdx}">
+        <div class="col-card-top">
+          <span class="field-role-tag ${roleClass}">${escapeHtml(badgeLabel)}</span>
+          <span class="word-counter-badge" id="wc_${tEntry.story_id}_${sIdx}">Words: ${wc} • #${tEntry.story_id}</span>
+        </div>
+        <div class="col-typo-row">
+          <span>${escapeHtml(curSeg.font_family)} (${escapeHtml(curSeg.font_style)})</span>
+          <div class="typo-mini-inputs">
+            <label title="Font Size (pt)">Sz:
+              <input type="number" step="0.5" value="${curSeg.size}"
+                onchange="onSegmentEdit('${tEntry.story_id}', ${sIdx}, 'size', parseFloat(this.value), this)">
+            </label>
+            <label title="Leading (pt)">Ld:
+              <input type="number" step="0.5" value="${curSeg.leading}"
+                onchange="onSegmentEdit('${tEntry.story_id}', ${sIdx}, 'leading', parseFloat(this.value), this)">
+            </label>
+          </div>
+        </div>
+        <textarea
+          class="meta-vertical-textarea ${roleClass}"
+          rows="3"
+          oninput="onSegmentEdit('${tEntry.story_id}', ${sIdx}, 'text', this.value, this)"
+        >${escapeHtml(curSeg.text)}</textarea>
+      </div>
+    `;
+  }
+
+  function renderPhotoMetaCard(pEntry) {
+    const chosenFile = PENDING_PHOTO_UPDATES[pEntry.asset_id];
+    const currentFile = chosenFile || pEntry.name;
+    const previewSrc = chosenFile ? `/photos/${encodeURIComponent(chosenFile)}` : pEntry.photo_url;
+    const isMod = Boolean(chosenFile);
+
+    const optionsList = STUDIO_STATE.library_photos.includes(currentFile)
+      ? STUDIO_STATE.library_photos
+      : [currentFile, ...STUDIO_STATE.library_photos];
+
+    const optsHtml = optionsList.slice(0, 250).map(fname =>
+      `<option value="${escapeHtml(fname)}" ${fname === currentFile ? 'selected' : ''}>${escapeHtml(fname)}</option>`
+    ).join('');
+
+    return `
+      <div class="meta-col-card ${isMod ? 'field-modified' : ''}" id="photo_col_${pEntry.asset_id}">
+        <div class="col-card-top">
+          <span class="field-role-tag role-photo">🖼️ PHOTO CHANGE #${pEntry.asset_id}</span>
+          <span class="word-counter-badge">${pEntry.pixels[0]}×${pEntry.pixels[1]} px</span>
+        </div>
+        <div class="photo-col-inner">
+          <img
+            id="photo-img-${pEntry.asset_id}"
+            class="photo-mini-preview"
+            src="${previewSrc}"
+            alt="${escapeHtml(currentFile)}"
+            title="Click to browse Photo Library"
+            onclick="openPhotoModal('${pEntry.asset_id}')"
+          >
+          <div class="photo-col-controls">
+            <select class="photo-select" onchange="assignPhotoToAsset('${pEntry.asset_id}', this.value)">
+              ${optsHtml}
+            </select>
+            <div class="photo-btn-row">
+              <button type="button" class="upload-photo-btn" onclick="triggerPcPhotoUpload('${pEntry.asset_id}')">
+                📤 Upload Photo
+              </button>
+              <button type="button" class="upload-photo-btn" onclick="openPhotoModal('${pEntry.asset_id}')">
+                🖼️ Library (${STUDIO_STATE.library_photos.length})
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderBodySegmentFrameCard(tEntry, seg, sIdx, colIndexLabel) {
+    const activeSegs = PENDING_STORY_UPDATES[tEntry.story_id] || tEntry.segments;
+    const curSeg = activeSegs[sIdx] || seg;
+    const isMod = Boolean(PENDING_STORY_UPDATES[tEntry.story_id]);
+    const wc = countWords(curSeg.text);
+
+    return `
+      <div class="body-frame-card ${isMod ? 'field-modified' : ''}" id="body_seg_${tEntry.story_id}_${sIdx}">
+        <div class="body-frame-header">
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <span class="field-role-tag role-body">📝 BODY COPY ${colIndexLabel} (#${tEntry.story_id})</span>
+            <span class="word-counter-badge" id="wc_${tEntry.story_id}_${sIdx}">Words: ${wc} • Chars: ${curSeg.text.length}</span>
+          </div>
+          <div class="typo-mini-inputs" style="font-size:11px; font-weight:800;">
+            <label>Sz:
+              <input type="number" step="0.5" value="${curSeg.size}"
+                onchange="onSegmentEdit('${tEntry.story_id}', ${sIdx}, 'size', parseFloat(this.value), this)">
+            </label>
+            <label>Ld:
+              <input type="number" step="0.5" value="${curSeg.leading}"
+                onchange="onSegmentEdit('${tEntry.story_id}', ${sIdx}, 'leading', parseFloat(this.value), this)">
+            </label>
+          </div>
+        </div>
+        <textarea
+          class="body-main-textarea"
+          oninput="onSegmentEdit('${tEntry.story_id}', ${sIdx}, 'text', this.value, this)"
+        >${escapeHtml(curSeg.text)}</textarea>
+      </div>
+    `;
+  }
+
+  function renderStorySlotCard(slot) {
+    const headlineCards = [];
+    const subheadCards = [];
+    const bylineIntroCards = [];
+    const photoCaptionCards = [];
+    const bodyCards = [];
+
+    // 1. Headlines
+    slot.headlines.forEach(hEntry => {
+      const rClass = hEntry.category === 'masthead' ? 'role-masthead' : 'role-headline';
+      hEntry.segments.forEach((seg, sIdx) => {
+        headlineCards.push(renderTextSegmentMetaCard(hEntry, seg, sIdx, 'HEADLINE / હેડલાઇન', rClass));
+      });
+    });
+
+    // 2. Subheads / Kickers / Decks
+    slot.subheads.forEach(sEntry => {
+      sEntry.segments.forEach((seg, sIdx) => {
+        subheadCards.push(renderTextSegmentMetaCard(sEntry, seg, sIdx, 'SUBHEAD / સબહેડ', 'role-subhead'));
+      });
+    });
+
+    // 3. Standalone Bylines
+    slot.bylines.forEach(bEntry => {
+      bEntry.segments.forEach((seg, sIdx) => {
+        bylineIntroCards.push(renderTextSegmentMetaCard(bEntry, seg, sIdx, 'BYLINE / બાયલાઇન', 'role-byline'));
+      });
+    });
+
+    // 4. Intros (may contain split Byline segment 0 + Intro segment 1!)
+    slot.intros.forEach(iEntry => {
+      iEntry.segments.forEach((seg, sIdx) => {
+        if (seg.role === 'byline') {
+          bylineIntroCards.push(renderTextSegmentMetaCard(iEntry, seg, sIdx, 'BYLINE / બાયલાઇન', 'role-byline'));
+        } else {
+          bylineIntroCards.push(renderTextSegmentMetaCard(iEntry, seg, sIdx, 'INTRO / બોલ્ડ ઇન્ટ્રો', 'role-intro'));
+        }
+      });
+    });
+
+    // 5. Photos & Photo Captions
+    slot.photos.forEach(pEntry => {
+      photoCaptionCards.push(renderPhotoMetaCard(pEntry));
+    });
+    slot.captions.forEach(cEntry => {
+      cEntry.segments.forEach((seg, sIdx) => {
+        photoCaptionCards.push(renderTextSegmentMetaCard(cEntry, seg, sIdx, 'PHOTO CAPTION / કેપ્શન', 'role-caption'));
+      });
+    });
+
+    // 6. Body Copy Frames (if segment 0 is a split Byline, put it in Byline column!)
+    let bodyCounter = 0;
+    slot.body_frames.forEach(bfEntry => {
+      bfEntry.segments.forEach((seg, sIdx) => {
+        if (seg.role === 'byline') {
+          bylineIntroCards.push(renderTextSegmentMetaCard(bfEntry, seg, sIdx, 'BYLINE / બાયલાઇન', 'role-byline'));
+        } else {
+          bodyCounter += 1;
+          bodyCards.push(renderBodySegmentFrameCard(bfEntry, seg, sIdx, `COL ${bodyCounter}`));
+        }
+      });
+    });
+
+    const roleColumnsHtml = [];
+    if (headlineCards.length > 0) {
+      roleColumnsHtml.push(`
+        <div class="role-column-box col-headline">
+          <div class="role-column-header">
+            <span>📰 HEADLINE (હેડલાઇન)</span>
+            <span>${headlineCards.length}</span>
+          </div>
+          ${headlineCards.join('')}
+        </div>
+      `);
+    }
+    if (subheadCards.length > 0) {
+      roleColumnsHtml.push(`
+        <div class="role-column-box col-subhead">
+          <div class="role-column-header">
+            <span>📌 SUBHEAD (સબહેડ / કિકર)</span>
+            <span>${subheadCards.length}</span>
+          </div>
+          ${subheadCards.join('')}
+        </div>
+      `);
+    }
+    if (bylineIntroCards.length > 0) {
+      roleColumnsHtml.push(`
+        <div class="role-column-box col-byline-intro">
+          <div class="role-column-header">
+            <span>✍️ BYLINE &amp; INTRO (બાયલાઇન / ઇન્ટ્રો)</span>
+            <span>${bylineIntroCards.length}</span>
+          </div>
+          ${bylineIntroCards.join('')}
+        </div>
+      `);
+    }
+    if (photoCaptionCards.length > 0) {
+      roleColumnsHtml.push(`
+        <div class="role-column-box col-photo-caption">
+          <div class="role-column-header">
+            <span>🖼️ PHOTO &amp; CAPTION (ફોટો / કેપ્શન)</span>
+            <span>${photoCaptionCards.length}</span>
+          </div>
+          ${photoCaptionCards.join('')}
+        </div>
+      `);
+    }
+
+    return `
+      <section class="story-card" id="card_${slot.slot_id}">
+        <div class="story-card-header">
+          <div class="story-title-group">
+            <span class="slot-badge">${escapeHtml(slot.slot_badge)}</span>
+            <span class="slot-title">${escapeHtml(slot.slot_title)}</span>
+            <span class="zone-badge">📍 ${escapeHtml(slot.zone_info)}</span>
+          </div>
+          <div class="story-header-actions">
+            <button type="button" class="btn btn-save-quick" style="padding:5px 10px; font-size:11px;" onclick="saveCurrentPageEdits(false)">
+              ✓ Quick Save
+            </button>
+            <button type="button" class="btn btn-save-live" style="padding:5px 10px; font-size:11px;" onclick="saveCurrentPageEdits(true)">
+              💾 Save &amp; Live Re-Draw in PD
+            </button>
+          </div>
+        </div>
+
+        <div class="story-body-layout">
+          ${roleColumnsHtml.length > 0 ? `
+            <div class="role-columns-grid">
+              ${roleColumnsHtml.join('')}
+            </div>
+          ` : ''}
+
+          ${bodyCards.length > 0 ? `
+            <div class="body-copy-section">
+              <div style="font-size:11.5px; font-weight:900; color:#1e3a8a; text-transform:uppercase; padding:2px 4px;">
+                📝 BODY COPY COLUMNS (મુખ્ય સમાચાર / બોડી કોપી — ${bodyCards.length} Column Frames)
+              </div>
+              <div class="body-copy-grid">
+                ${bodyCards.join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderEditorWorkspace() {
+    const pg = STUDIO_STATE.pages.find(p => p.page_number === CURRENT_PAGE_NUM);
+    if (!pg) return;
+    const container = document.getElementById('storiesScrollArea');
+    const q = (document.getElementById('searchBox').value || '').trim().toLowerCase();
+    const slots = GROUPED_SLOTS_CACHE[CURRENT_PAGE_NUM] || [];
+
+    if (ACTIVE_SLOT_ID === 'all_photos' && !q) {
+      const photoCards = pg.photos.map(p => renderPhotoMetaCard(p));
+      const captionEntries = pg.texts.filter(t => t.category === 'caption');
+      captionEntries.forEach(cEntry => {
+        cEntry.segments.forEach((seg, sIdx) => {
+          photoCards.push(renderTextSegmentMetaCard(cEntry, seg, sIdx, 'PHOTO CAPTION / કેપ્શન', 'role-caption'));
+        });
+      });
+
+      container.innerHTML = `
+        <section class="story-card">
+          <div class="story-card-header">
+            <div class="story-title-group">
+              <span class="slot-badge">ALL PHOTOS &amp; CAPTIONS</span>
+              <span class="slot-title">${pg.badge} — ${pg.photos.length} Photo Slots &amp; ${captionEntries.length} Captions</span>
+            </div>
+            <div class="story-header-actions">
+              <button class="btn btn-save-live" onclick="saveCurrentPageEdits(true)">💾 Save &amp; Live Re-Draw in PD</button>
+            </div>
+          </div>
+          <div class="story-body-layout">
+            <div class="role-columns-grid">
+              ${photoCards.join('')}
+            </div>
+          </div>
+        </section>
+      `;
+      return;
+    }
+
+    if (ACTIVE_SLOT_ID === 'all_headlines' && !q) {
+      const headCards = [];
+      pg.texts.filter(t => t.category === 'headline' || t.category === 'subhead').forEach(hEntry => {
+        const rClass = hEntry.category === 'headline' ? 'role-headline' : 'role-subhead';
+        const lbl = hEntry.category === 'headline' ? 'HEADLINE / હેડલાઇન' : 'SUBHEAD / સબહેડ';
+        hEntry.segments.forEach((seg, sIdx) => {
+          headCards.push(renderTextSegmentMetaCard(hEntry, seg, sIdx, lbl, rClass));
+        });
+      });
+
+      container.innerHTML = `
+        <section class="story-card">
+          <div class="story-card-header">
+            <div class="story-title-group">
+              <span class="slot-badge">ALL HEADLINES &amp; SUBHEADS</span>
+              <span class="slot-title">${pg.badge} — Multi-Column Headline &amp; Subhead Editor (${headCards.length})</span>
+            </div>
+            <div class="story-header-actions">
+              <button class="btn btn-save-live" onclick="saveCurrentPageEdits(true)">💾 Save &amp; Live Re-Draw in PD</button>
+            </div>
+          </div>
+          <div class="story-body-layout">
+            <div class="role-columns-grid">
+              ${headCards.join('')}
+            </div>
+          </div>
+        </section>
+      `;
+      return;
+    }
+
+    if (ACTIVE_SLOT_ID === 'all_bylines_intros' && !q) {
+      const biCards = [];
+      pg.texts.forEach(tEntry => {
+        tEntry.segments.forEach((seg, sIdx) => {
+          if (tEntry.category === 'byline' || seg.role === 'byline') {
+            biCards.push(renderTextSegmentMetaCard(tEntry, seg, sIdx, 'BYLINE / બાયલાઇન', 'role-byline'));
+          } else if (tEntry.category === 'intro' || seg.role === 'intro') {
+            biCards.push(renderTextSegmentMetaCard(tEntry, seg, sIdx, 'INTRO / બોલ્ડ ઇન્ટ્રો', 'role-intro'));
+          }
+        });
+      });
+
+      container.innerHTML = `
+        <section class="story-card">
+          <div class="story-card-header">
+            <div class="story-title-group">
+              <span class="slot-badge">ALL BYLINES &amp; INTROS</span>
+              <span class="slot-title">${pg.badge} — Multi-Column Byline &amp; Intro Editor (${biCards.length})</span>
+            </div>
+            <div class="story-header-actions">
+              <button class="btn btn-save-live" onclick="saveCurrentPageEdits(true)">💾 Save &amp; Live Re-Draw in PD</button>
+            </div>
+          </div>
+          <div class="story-body-layout">
+            <div class="role-columns-grid">
+              ${biCards.join('')}
+            </div>
+          </div>
+        </section>
+      `;
+      return;
+    }
+
+    const filteredSlots = slots.filter(slot => {
+      if (q) {
+        const hayParts = [slot.slot_title, slot.slot_badge];
+        [...slot.headlines, ...slot.subheads, ...slot.bylines, ...slot.intros, ...slot.captions, ...slot.body_frames].forEach(t => {
+          hayParts.push(String(t.story_id));
+          t.segments.forEach(s => hayParts.push(s.text));
+        });
+        slot.photos.forEach(p => hayParts.push(p.name, String(p.asset_id)));
+        return hayParts.join(' ').toLowerCase().includes(q);
+      }
+      if (ACTIVE_SLOT_ID === 'all_slots') return true;
+      return slot.slot_id === ACTIVE_SLOT_ID;
+    });
+
+    container.innerHTML = filteredSlots.length
+      ? filteredSlots.map(st => renderStorySlotCard(st)).join('')
+      : `<div style="padding:36px; text-align:center; color:var(--ink-muted); font-weight:800;">No matching story slots found.</div>`;
+  }
+
+  /* ==========================================================================
+     HANDLING LIVE EDITS TO TEXT SEGMENTS, TYPOGRAPHY & PHOTOS
+     ========================================================================== */
+  function onSegmentEdit(storyId, segIndex, field, newVal, inputEl) {
+    const pg = STUDIO_STATE.pages.find(p => p.page_number === CURRENT_PAGE_NUM);
+    if (!pg) return;
+    const origEntry = pg.texts.find(t => String(t.story_id) === String(storyId));
+    if (!origEntry) return;
+
+    if (!PENDING_STORY_UPDATES[storyId]) {
+      PENDING_STORY_UPDATES[storyId] = JSON.parse(JSON.stringify(origEntry.segments));
+    }
+    PENDING_STORY_UPDATES[storyId][segIndex][field] = newVal;
+
+    if (inputEl) {
+      const card = inputEl.closest('.meta-col-card, .body-frame-card');
+      if (card) card.classList.add('field-modified');
+    }
+
+    if (field === 'text') {
+      const wcEl = document.getElementById(`wc_${storyId}_${segIndex}`);
+      if (wcEl) {
+        const w = countWords(newVal);
+        wcEl.textContent = `Words: ${w} • #${storyId}`;
+      }
+    }
+    updateDirtyIndicator();
+  }
+
+  function assignPhotoToAsset(assetId, filename) {
+    PENDING_PHOTO_UPDATES[assetId] = filename;
+    const imgEl = document.getElementById(`photo-img-${assetId}`);
+    if (imgEl) imgEl.src = `/photos/${encodeURIComponent(filename)}?t=${Date.now()}`;
+    const cardEl = document.getElementById(`photo_col_${assetId}`);
+    if (cardEl) cardEl.classList.add('field-modified');
+    updateDirtyIndicator();
+    showToast(`🖼️ Photo "${filename}" staged for Asset #${assetId} — click Save & Live Re-Draw to apply!`);
+  }
+
+  function triggerPcPhotoUpload(assetId) {
+    ACTIVE_UPLOAD_ASSET_ID = String(assetId);
+    const inp = document.getElementById('hiddenFileInput');
+    inp.value = '';
+    inp.click();
+  }
+
+  function handleDirectFileUpload(ev) {
+    const file = ev.target.files && ev.target.files[0];
+    if (!file || !ACTIVE_UPLOAD_ASSET_ID) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        showToast('Uploading photo ' + file.name + '...');
+        const resp = await fetch('/api/upload-photo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: file.name, data_uri: reader.result })
+        });
+        const res = await resp.json();
+        if (!res.ok) throw new Error(res.error || 'Upload failed');
+        if (!STUDIO_STATE.library_photos.includes(res.filename)) {
+          STUDIO_STATE.library_photos.unshift(res.filename);
+        }
+        assignPhotoToAsset(ACTIVE_UPLOAD_ASSET_ID, res.filename);
+        renderEditorWorkspace();
+      } catch (err) {
+        showToast('Upload error: ' + err.message, 4500);
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function openPhotoModal(assetId) {
+    ACTIVE_UPLOAD_ASSET_ID = String(assetId);
+    document.getElementById('modalTargetAssetId').textContent = '#' + assetId;
+    const sInp = document.getElementById('photoSearchInput');
+    if (sInp) sInp.value = '';
+    renderPhotoModalGrid();
+    document.getElementById('photoModal').classList.add('open');
+  }
+
+  function renderPhotoModalGrid() {
+    const grid = document.getElementById('modalPhotoGrid');
+    const q = (document.getElementById('photoSearchInput')?.value || '').trim().toLowerCase();
+    const list = STUDIO_STATE.library_photos.filter(fname => !q || fname.toLowerCase().includes(q));
+    grid.innerHTML = list.map(fname => `
+      <div class="lib-photo-item" onclick="selectPhotoFromModal('${escapeHtml(fname)}')">
+        <img src="/photos/${encodeURIComponent(fname)}" loading="lazy" alt="${escapeHtml(fname)}">
+        <div class="lib-photo-name" title="${escapeHtml(fname)}">${escapeHtml(fname)}</div>
+      </div>
+    `).join('');
+  }
+
+  function closePhotoModal() {
+    document.getElementById('photoModal').classList.remove('open');
+  }
+
+  function selectPhotoFromModal(filename) {
+    if (ACTIVE_UPLOAD_ASSET_ID) {
+      assignPhotoToAsset(ACTIVE_UPLOAD_ASSET_ID, filename);
+      renderEditorWorkspace();
+    }
+    closePhotoModal();
+  }
+
+  /* ==========================================================================
+     10-PAGE BROADSHEET GALLERY MODAL
+     ========================================================================== */
+  function openGalleryModal() {
+    const grid = document.getElementById('galleryGrid5Col');
+    grid.innerHTML = STUDIO_STATE.pages.map(pg => {
+      const slots = GROUPED_SLOTS_CACHE[pg.page_number] || [];
+      return `
+        <div class="gallery-card">
+          <div class="gallery-card-head">
+            <span style="color:var(--crimson);">${escapeHtml(pg.badge)} — ${escapeHtml(pg.section)}</span>
+            <span style="color:var(--ink-muted);">${slots.length} Stories</span>
+          </div>
+          <div class="gallery-thumb-wrap" onclick="closeGalleryModal(); selectPage(${pg.page_number}, 'all_slots', true);">
+            <img src="${pg.png_url}" alt="${escapeHtml(pg.badge)}" loading="lazy">
+          </div>
+          <div class="gallery-card-foot">
+            <button class="btn btn-save-quick" style="flex:1; justify-content:center;" onclick="closeGalleryModal(); selectPage(${pg.page_number}, 'all_slots', false);">
+              ✏️ Edit Columns
+            </button>
+            <button class="btn btn-live" style="flex:1; justify-content:center;" onclick="closeGalleryModal(); selectPage(${pg.page_number}, 'all_slots', true);">
+              ⚡ Live Re-Draw
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+    document.getElementById('galleryModal').classList.add('open');
+  }
+
+  function closeGalleryModal() {
+    document.getElementById('galleryModal').classList.remove('open');
+  }
+
+  /* ==========================================================================
+     SAVE CHANGES & LIVE RE-DRAW IN PAGE DESIGNER 1.0
+     ========================================================================== */
+  async function saveCurrentPageEdits(liveBuildAfter = true) {
+    const btnQuick = document.getElementById('btnSaveQuick');
+    const btnLive = document.getElementById('btnSaveAndLive');
+    const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '35', 10);
+
+    try {
+      btnQuick.disabled = true;
+      btnLive.disabled = true;
+      showToast(
+        liveBuildAfter
+          ? `💾 Saving Page ${CURRENT_PAGE_NUM} & Re-Drawing Live in Page Designer 1.0...`
+          : `💾 Saving Page ${CURRENT_PAGE_NUM} & Refreshing Dummy Preview...`,
+        8000
+      );
+
+      const resp = await fetch('/api/save-page-edits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          edition: CURRENT_EDITION,
+          page_number: CURRENT_PAGE_NUM,
+          story_updates: PENDING_STORY_UPDATES,
+          photo_updates: PENDING_PHOTO_UPDATES,
+          trigger_live_build: liveBuildAfter,
+          step_ms: stepMs
+        })
+      });
+      const res = await resp.json();
+      if (!res.ok) throw new Error(res.error || 'Save failed');
+
+      const nStories = res.replaced_stories ?? 0;
+      const nPhotos = res.replaced_photos ?? 0;
+
+      await loadStudioState(true, false);
+      showToast(
+        liveBuildAfter
+          ? `✓ Saved (${nStories} stories, ${nPhotos} photos) & Live Re-Drawing Page ${CURRENT_PAGE_NUM} (${CURRENT_EDITION.toUpperCase()}) in Page Designer!`
+          : `✓ Saved (${nStories} stories, ${nPhotos} photos) & Updated Preview in ${res.elapsed_sec}s!`
+      );
+    } catch (err) {
+      showToast('Error saving page: ' + err.message, 5000);
+    } finally {
+      btnQuick.disabled = false;
+      btnLive.disabled = false;
+    }
+  }
+
+  async function triggerLiveBuildPage(pageNum, mode = 'redraw') {
+    if (pageNum !== CURRENT_PAGE_NUM) {
+      selectPage(pageNum, 'all_slots', false);
+    }
+    const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '35', 10);
+    try {
+      const pstr = String(pageNum).padStart(2, '0');
+      showToast(`⚡ Re-Drawing ${CURRENT_EDITION.toUpperCase()} Page ${pstr} live step-by-step in Page Designer 1.0 (Edit Mode)...`, 5000);
+      const resp = await fetch(`/api/live-build?edition=${encodeURIComponent(CURRENT_EDITION)}&page=${pageNum}&speed=${stepMs}&mode=${mode}`);
+      const res = await resp.json();
+      if (!res.ok) throw new Error(res.error || 'Live re-draw failed');
+    } catch (err) {
+      showToast('Live Re-Draw error: ' + err.message, 4500);
+    }
+  }
+
+  function triggerLiveBuildCurrentPage(mode = 'redraw') {
+    triggerLiveBuildPage(CURRENT_PAGE_NUM, mode);
+  }
+
+  async function triggerLiveBuildAllPages() {
+    const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '35', 10);
+    try {
+      showToast(`🎬 Re-Drawing ALL 10 ${CURRENT_EDITION.toUpperCase()} Pages sequentially in Page Designer 1.0...`, 8000);
+      const resp = await fetch(`/api/live-build?edition=${encodeURIComponent(CURRENT_EDITION)}&all=1&speed=${stepMs}`);
+      const res = await resp.json();
+      if (!res.ok) throw new Error(res.error || 'Live build all failed');
+    } catch (err) {
+      showToast('Error: ' + err.message, 4500);
+    }
+  }
+
+  async function switchAndLiveRunAll(editionKey) {
+    await switchEdition(editionKey);
+    await triggerLiveBuildAllPages();
+  }
+
+  async function triggerAutoRunAll3Editions() {
+    try {
+      showToast('🚀 Auto-Running ALL 3 Editions (Gujarati → Hindi → English • 30 Pages) live in Page Designer 1.0...', 10000);
+      const resp = await fetch('/api/live-build-all-editions');
+      const res = await resp.json();
+      if (!res.ok) throw new Error(res.error || 'Failed to launch 3-edition live run');
+    } catch (err) {
+      showToast('Error: ' + err.message, 4500);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    loadStudioState(false, false);
+  });
+</script>
+</body>
+</html>
