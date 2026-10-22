@@ -967,6 +967,51 @@ def extract_all_pages_state(edition: str = "gujarati") -> dict:
     }
 
 
+def extract_compare_overview() -> dict:
+    """
+    Fast overview payload for the 3-Column Comparison UI:
+      - Left Column:   `hindi`    (आस-पास — 10 Pages)
+      - Center Column: `gujarati` (ગુજરાત સમાચાર — 10 Pages, Original Master in Center)
+      - Right Column:  `english`  (INDIAN POST — 10 Pages)
+    """
+    ts = int(time.time() * 1000)
+    by_edition = {}
+    for ed_key in ("hindi", "gujarati", "english"):
+        cfg = EDITION_CONFIG[ed_key]
+        meta_map = PAGE_META_BY_EDITION[ed_key]
+        ed_pages = []
+        for pnum in range(1, 11):
+            meta = meta_map.get(pnum, {
+                "badge": f"PAGE {pnum:02d}",
+                "section": f"PAGE {pnum:02d}",
+                "title": f"Page {pnum:02d}",
+                "subtitle": cfg["masthead_title"],
+            })
+            saved_png_name = cfg["saved_png_pattern"].format(pnum=pnum)
+            thumb_name = cfg["thumb_pattern"].format(pnum=pnum)
+            ed_pages.append({
+                "page_number": pnum,
+                "edition": ed_key,
+                "badge": meta["badge"],
+                "section": meta["section"],
+                "title": meta["title"],
+                "subtitle": meta["subtitle"],
+                "png_url": f"/saved_pages/{saved_png_name}?t={ts}",
+                "thumb_url": f"/thumbnails/{thumb_name}?t={ts}",
+            })
+        by_edition[ed_key] = {
+            "key": ed_key,
+            "menu_label": cfg["menu_label"],
+            "masthead_title": cfg["masthead_title"],
+            "pages": ed_pages,
+        }
+    return {
+        "ok": True,
+        "column_order": ["hindi", "gujarati", "english"],
+        "editions": by_edition,
+    }
+
+
 # ==============================================================================
 # LIVE STEP-BY-STEP RE-DRAW IN PAGE DESIGNER 1.0 (ON PAGE CLICK OR BUTTON)
 # ==============================================================================
@@ -1057,7 +1102,7 @@ def run_live_step_by_step_build_in_pagedesigner(
                 active_docs = ui_info.get("documents", [])
                 need_open = True
                 for d in active_docs:
-                    if cfg["combined_name"] in str(d.get("path", "")):
+                    if Path(str(d.get("path", ""))).stem == cfg["combined_name"]:
                         if d.get("active"):
                             need_open = False
                             break
@@ -1113,6 +1158,73 @@ def run_live_step_by_step_build_in_pagedesigner(
                 print(f"[LiveBuild Error] {exc}")
 
     threading.Thread(target=_worker, daemon=True).start()
+
+
+def run_live_trio_for_page(page_num: int, step_delay: float = 0.020):
+    """
+    Sequentially opens and draws Hindi (Left) -> Gujarati (Center) -> English (Right)
+    for `page_num` inside Page Designer 1.0 so the user can watch all 3 editions draw live!
+    """
+    _CANCEL_CURRENT_ANIM.set()
+
+    def _trio_worker():
+        with _LIVE_BUILD_LOCK:
+            _CANCEL_CURRENT_ANIM.clear()
+            try:
+                ensure_visible_pagedesigner(bring_to_front=True)
+                sock, call = pd_rpc_session()
+                try:
+                    call("ui.focus", {})
+                except Exception:
+                    pass
+
+                for ed_key in ("hindi", "gujarati", "english"):
+                    if _CANCEL_CURRENT_ANIM.is_set():
+                        break
+                    cfg = EDITION_CONFIG[ed_key]
+                    combined_pd = DIR_SAME / f"{cfg['combined_name']}.pagedesigner"
+                    if not combined_pd.exists():
+                        combined_pd = _rebuild_combined_for_edition(ed_key)
+                    with zipfile.ZipFile(combined_pd, "r") as zf:
+                        doc = json.loads(zf.read("document.json").decode("utf-8"))
+
+                    call("engine.execute", {"command": "file.open", "params": {"path": str(combined_pd)}})
+                    ui_state = call("ui.inspect", {}).get("result", {}).get("ui", {})
+                    call("engine.execute", {"command": "view.screenMode", "params": {"mode": "normal"}})
+                    if not ui_state.get("frameEdges", False):
+                        call("engine.execute", {"command": "view.frameEdges", "params": {}})
+                    if not ui_state.get("guides", False):
+                        call("engine.execute", {"command": "view.guides", "params": {}})
+
+                    bring_pagedesigner_to_front()
+                    if 1 <= page_num <= len(doc.get("spreads", [])):
+                        sp = doc["spreads"][page_num - 1]
+                        leaf_ids, first_head_id = _collect_sorted_leaf_item_ids_and_first_headline(sp.get("items", []))
+                        if leaf_ids:
+                            call("engine.execute", {"command": "view.goToPage", "params": {"page": page_num}})
+                            call("engine.execute", {"command": "view.fitPage", "params": {}})
+                            call("engine.execute", {"command": "edit.deselectAll", "params": {}})
+                            call("engine.execute", {"command": "object.setFlags", "params": {"ids": leaf_ids, "hidden": True}})
+                            time.sleep(0.14)
+                            chunk_sz = 3 if len(leaf_ids) > 100 else 2
+                            for i in range(0, len(leaf_ids), chunk_sz):
+                                if _CANCEL_CURRENT_ANIM.is_set():
+                                    call("engine.execute", {"command": "object.setFlags", "params": {"ids": leaf_ids[i:], "hidden": False}})
+                                    break
+                                batch_ids = leaf_ids[i : i + chunk_sz]
+                                call("engine.execute", {"command": "object.setFlags", "params": {"ids": batch_ids, "hidden": False}})
+                                time.sleep(step_delay)
+                            if first_head_id and not _CANCEL_CURRENT_ANIM.is_set():
+                                try:
+                                    call("engine.execute", {"command": "object.select", "params": {"ids": [first_head_id]}})
+                                except Exception:
+                                    pass
+                            time.sleep(0.45)
+                sock.close()
+            except Exception as exc:
+                print(f"[LiveTrio Error] {exc}")
+
+    threading.Thread(target=_trio_worker, daemon=True).start()
 
 
 # ==============================================================================
@@ -1316,6 +1428,13 @@ class GujaratiStudioRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.path = "/Gujarati_Page_Designer_App.html"
             return super().do_GET()
 
+        if parsed.path == "/api/compare-overview":
+            try:
+                self._send_json(200, extract_compare_overview())
+            except Exception as exc:
+                self._send_json(500, {"ok": False, "error": str(exc)})
+            return
+
         if parsed.path in ("/api/state", "/api/pages"):
             qs = urllib.parse.parse_qs(parsed.query)
             edition = qs.get("edition", ["gujarati"])[0]
@@ -1323,6 +1442,15 @@ class GujaratiStudioRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json(200, extract_all_pages_state(edition=edition))
             except Exception as exc:
                 self._send_json(500, {"ok": False, "error": str(exc)})
+            return
+
+        if parsed.path == "/api/live-build-page-trio":
+            qs = urllib.parse.parse_qs(parsed.query)
+            page_num = int(qs.get("page", ["1"])[0])
+            speed_raw = qs.get("speed", qs.get("step_ms", ["22"]))[0]
+            speed_ms = float(speed_raw) / 1000.0
+            run_live_trio_for_page(page_num=page_num, step_delay=max(0.012, min(speed_ms, 0.25)))
+            self._send_json(200, {"ok": True, "page": page_num, "order": ["hindi", "gujarati", "english"]})
             return
 
         if parsed.path == "/api/live-build-all-editions":

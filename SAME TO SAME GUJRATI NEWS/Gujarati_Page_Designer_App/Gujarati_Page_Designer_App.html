@@ -1124,6 +1124,323 @@
   .toast-bar.show {
     display: inline-flex;
   }
+
+  /* ==========================================================================
+     NEW: 3-COLUMN SIDE-BY-SIDE COMPARISON STUDIO
+     (LEFT = HINDI आस-पास | CENTER = GUJARATI ગુજરાત સમાચાર | RIGHT = ENGLISH INDIAN POST)
+     + 10-10-10 TOP MENU BAR
+     ========================================================================== */
+  .top-3col-menu-bar {
+    background: #0f172a;
+    border-bottom: 1px solid #334155;
+    padding: 6px 12px;
+    display: grid;
+    grid-template-columns: 1fr 1.08fr 1fr;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .menu-col-card {
+    background: #1e293b;
+    border: 1.5px solid #475569;
+    border-radius: 8px;
+    padding: 5px 9px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: all 0.15s ease;
+  }
+
+  .menu-col-card.center-master {
+    background: linear-gradient(180deg, #2a1215 0%, #1e293b 100%);
+    border: 2px solid #f59e0b;
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.28);
+  }
+
+  .menu-col-card.active-edition {
+    border-color: #38bdf8;
+  }
+
+  .menu-col-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .menu-col-title {
+    font-size: 11.5px;
+    font-weight: 900;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pos-pill {
+    font-size: 9.5px;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .pos-pill.left-hi { background: #2563eb; color: #fff; }
+  .pos-pill.center-gu { background: linear-gradient(135deg, #f59e0b, #dc2626); color: #fff; }
+  .pos-pill.right-en { background: #059669; color: #fff; }
+
+  .menu-10pages-row {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 3px;
+  }
+
+  .mini-pbtn {
+    background: #0f172a;
+    color: #cbd5e1;
+    border: 1px solid #475569;
+    border-radius: 5px;
+    padding: 3px 0;
+    font-size: 10.5px;
+    font-weight: 900;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.12s ease;
+  }
+  .mini-pbtn:hover {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #f87171;
+    transform: translateY(-1px);
+  }
+  .mini-pbtn.active {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #ffffff;
+    border-color: #fde047;
+    box-shadow: 0 0 6px rgba(220, 38, 38, 0.55);
+  }
+
+  .sync-compare-bar {
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+    padding: 5px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  .sync-pages-strip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .sync-pbtn {
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 4px 9px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+  .sync-pbtn:hover {
+    background: #334155;
+    border-color: #94a3b8;
+  }
+  .sync-pbtn.active {
+    background: linear-gradient(135deg, #f59e0b, #dc2626);
+    color: #fff;
+    border-color: #fef08a;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+  }
+
+  /* 3-COLUMN SIDE-BY-SIDE COMPARISON STAGE */
+  .compare-3col-workspace {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1.06fr 1fr;
+    gap: 10px;
+    padding: 8px 10px;
+    background: #0b1120;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .compare-col {
+    background: #1e293b;
+    border: 1.5px solid #334155;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .compare-col.center-gujarati-col {
+    border: 2.5px solid #f59e0b;
+    box-shadow: 0 0 22px rgba(245, 158, 11, 0.22);
+  }
+
+  .compare-col-header {
+    background: #0f172a;
+    padding: 7px 10px;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .compare-col.center-gujarati-col .compare-col-header {
+    background: linear-gradient(90deg, #451a03 0%, #7f1d1d 50%, #451a03 100%);
+    border-bottom: 1px solid #f59e0b;
+  }
+
+  .compare-col-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .compare-col-main-title {
+    font-size: 13px;
+    font-weight: 900;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .compare-col-sub {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #cbd5e1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .compare-col-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .btn-col-live {
+    flex: 1;
+    justify-content: center;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #ffffff;
+    border: 1px solid #f87171;
+    border-radius: 6px;
+    padding: 6px 9px;
+    font-size: 11px;
+    font-weight: 900;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
+    transition: all 0.14s ease;
+  }
+  .btn-col-live:hover {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    transform: translateY(-1px);
+  }
+
+  .btn-col-script {
+    background: #d97706;
+    color: #fff;
+    border: 1px solid #fbbf24;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 10.5px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .btn-col-script:hover {
+    background: #b45309;
+  }
+
+  .btn-col-edit {
+    background: #2563eb;
+    color: #fff;
+    border: 1px solid #60a5fa;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 10.5px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .btn-col-edit:hover {
+    background: #1d4ed8;
+  }
+
+  .compare-canvas-scroll {
+    flex: 1;
+    overflow: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #0f172a;
+    position: relative;
+  }
+
+  .compare-page-img-wrap {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .compare-page-img {
+    width: 100%;
+    height: auto;
+    background: #ffffff;
+    padding: 3px;
+    border-radius: 4px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+    display: block;
+  }
+
+  .compare-page-img-wrap:hover .compare-page-img {
+    box-shadow: 0 0 0 3px #ef4444, 0 14px 36px rgba(220, 38, 38, 0.45);
+  }
+
+  .click-to-draw-pill {
+    position: sticky;
+    bottom: 8px;
+    background: rgba(15, 23, 42, 0.92);
+    color: #fef08a;
+    border: 1px solid #f59e0b;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 800;
+    pointer-events: none;
+    margin-top: -30px;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  }
 </style>
 </head>
 <body>
@@ -1131,92 +1448,231 @@
 <!-- TOP STUDIO HEADER -->
 <header class="top-header">
   <div class="brand-group">
-    <span class="brand-pill" id="headerBrandPill">INDIAN POST • Port 47898</span>
+    <span class="brand-pill" id="headerBrandPill">3-EDITION COMPARE • Port 47898</span>
     <div style="min-width:0;">
-      <div class="brand-title" id="headerBrandTitle">Same-to-Same 3-Edition Newspaper Studio (Gujarati • Hindi • English — 10 Pages Each)</div>
-      <div class="brand-sub">Switch Between 1. ગુજરાતી (ગુજરાત સમાચાર), 2. हिन्दी (आस-पास), &amp; 3. ENGLISH (INDIAN POST) • Click Any Page (P01–P10) to Re-Draw Live in Page Designer</div>
+      <div class="brand-title" id="headerBrandTitle">Same-to-Same 3-Edition Comparison Studio — Left: हिन्दी (आस-पास) • Center: ગુજરાતી (ગુજરાત સમાચાર) • Right: ENGLISH (INDIAN POST)</div>
+      <div class="brand-sub">Click Any Page (P01–P10) or Newspaper Image Below to Open &amp; Watch It Draw Live Step-by-Step in Page Designer 1.0</div>
     </div>
   </div>
 
   <div class="top-actions">
-    <label class="auto-redraw-toggle" title="When checked, clicking any Page Tab (P01..P10) automatically re-draws that page live on the Page Designer canvas!">
+    <button class="btn" id="btnViewModeCompare" style="background:linear-gradient(135deg,#f59e0b,#dc2626); color:#fff; border:1px solid #fef08a;" onclick="setWorkspaceMode('compare')">
+      👁️ 3-Column Compare View (Hindi • Gujarati • English)
+    </button>
+    <button class="btn btn-save-quick" id="btnViewModeEditor" onclick="setWorkspaceMode('editor')">
+      ✏️ Single-Page Story &amp; Photo Editor
+    </button>
+    <label class="auto-redraw-toggle" title="When checked, clicking any Page (P01..P10) automatically opens &amp; draws that page live in Page Designer 1.0!">
       <input type="checkbox" id="autoRedrawOnClick" checked>
-      ⚡ Auto Re-Draw in Page Designer on Page Click
+      ⚡ Click Page → Live Draw in PD
     </label>
     <label class="speed-box">
       Speed (ms):
-      <input type="number" id="buildSpeedInput" value="35" min="15" max="250" step="5">
+      <input type="number" id="buildSpeedInput" value="30" min="12" max="250" step="5">
     </label>
-    <button class="btn btn-gallery" onclick="openGalleryModal()">
-      📑 All 10 Pages Gallery
-    </button>
-    <button class="btn btn-live" onclick="triggerLiveBuildCurrentPage('redraw')">
-      ⚡ Re-Draw Page <span id="btnCurPageNum">01</span> in Page Designer
-    </button>
-    <button class="btn btn-script" onclick="triggerLiveBuildCurrentPage('script')" title="Run build_page_XX_same_to_same.py from scratch in Page Designer">
-      🔨 Script Re-Build
-    </button>
-    <button class="btn btn-live-all" onclick="triggerLiveBuildAllPages()">
-      🎬 Live Re-Draw All 10 Pages
-    </button>
-    <button class="btn btn-save-live" id="btnSaveAndLive" onclick="saveCurrentPageEdits(true)">
-      💾 Save &amp; Live Re-Draw in PD
-    </button>
-    <button class="btn btn-save-quick" id="btnSaveQuick" onclick="saveCurrentPageEdits(false)">
-      ✓ Quick Save
+    <button class="btn btn-live-all" style="background:linear-gradient(135deg,#059669,#047857);" onclick="triggerAutoRunAll3Editions()">
+      🚀 Auto-Run All 30 Pages in PD
     </button>
   </div>
 </header>
 
-<!-- 3-EDITION MENU BAR (1. GUJARATI | 2. HINDI | 3. ENGLISH) -->
-<div class="edition-menu-bar">
-  <div class="edition-tabs-group">
-    <span class="edition-menu-label">📰 Select &amp; Live-Run Edition (10 Pages):</span>
-    <button class="edition-tab-btn" id="edBtn_gujarati" onclick="switchEdition('gujarati')">
-      <span class="edition-badge-num">MENU 1</span>
-      <span>ગુજરાતી — ગુજરાત સમાચાર (10 Pages)</span>
-      <span class="edition-badge-num" style="background:#dc2626;" onclick="event.stopPropagation(); switchAndLiveRunAll('gujarati')">⚡ Live Run 10</span>
-    </button>
-    <button class="edition-tab-btn" id="edBtn_hindi" onclick="switchEdition('hindi')">
-      <span class="edition-badge-num">MENU 2</span>
-      <span>हिन्दी — आस-पास (10 Pages)</span>
-      <span class="edition-badge-num" style="background:#dc2626;" onclick="event.stopPropagation(); switchAndLiveRunAll('hindi')">⚡ Live Run 10</span>
-    </button>
-    <button class="edition-tab-btn active" id="edBtn_english" onclick="switchEdition('english')">
-      <span class="edition-badge-num">MENU 3</span>
-      <span>ENGLISH — INDIAN POST (10 Pages)</span>
-      <span class="edition-badge-num" style="background:#dc2626;" onclick="event.stopPropagation(); switchAndLiveRunAll('english')">⚡ Live Run 10</span>
-    </button>
-    <button class="btn btn-live-all" style="background:linear-gradient(135deg,#059669,#047857); padding:5px 12px;" onclick="triggerAutoRunAll3Editions()">
-      🚀 Auto-Run All 3 Editions (Gujarati → Hindi → English • 30 Pages) in PD
-    </button>
+<!-- 3-COLUMN 10-10-10 TOP MENU BAR (LEFT: HINDI 10 PAGES | CENTER: GUJARATI 10 PAGES | RIGHT: ENGLISH 10 PAGES) -->
+<div class="top-3col-menu-bar">
+  <!-- LEFT MENU: HINDI (आस-पास — 10 PAGES) -->
+  <div class="menu-col-card" id="menuCard_hindi">
+    <div class="menu-col-top">
+      <div class="menu-col-title">
+        <span class="pos-pill left-hi">◀ LEFT (हिन्दी)</span>
+        <span>आस-पास — 10 Pages (Calligraphic)</span>
+      </div>
+      <div style="display:flex; gap:4px;">
+        <button class="page-tab-live-btn" style="background:#dc2626; color:#fff; border:none;" onclick="switchAndLiveRunAll('hindi')">⚡ Run All 10</button>
+        <button class="page-tab-live-btn" style="background:#2563eb; color:#fff; border:none;" onclick="openEditorForEditionPage('hindi', COMPARE_PAGES.hindi)">✏️ Edit</button>
+      </div>
+    </div>
+    <div class="menu-10pages-row" id="topMenuPages_hindi"></div>
   </div>
-  <div style="font-size:11px; font-weight:800; color:#a7f3d0;" id="activeEditionStatusLabel">
-    Active Edition: 3. ENGLISH — INDIAN POST (Shaily Calligraphic Masthead • WebP Fast Assets)
+
+  <!-- CENTER MENU: GUJARATI (ગુજરાત સમાચાર — 10 PAGES MASTER IN CENTER) -->
+  <div class="menu-col-card center-master" id="menuCard_gujarati">
+    <div class="menu-col-top">
+      <div class="menu-col-title">
+        <span class="pos-pill center-gu">★ CENTER MASTER (ગુજરાતી) ★</span>
+        <span>ગુજરાત સમાચાર — 10 Pages (Original)</span>
+      </div>
+      <div style="display:flex; gap:4px;">
+        <button class="page-tab-live-btn" style="background:#dc2626; color:#fff; border:none;" onclick="switchAndLiveRunAll('gujarati')">⚡ Run All 10</button>
+        <button class="page-tab-live-btn" style="background:#2563eb; color:#fff; border:none;" onclick="openEditorForEditionPage('gujarati', COMPARE_PAGES.gujarati)">✏️ Edit</button>
+      </div>
+    </div>
+    <div class="menu-10pages-row" id="topMenuPages_gujarati"></div>
+  </div>
+
+  <!-- RIGHT MENU: ENGLISH (INDIAN POST — 10 PAGES) -->
+  <div class="menu-col-card" id="menuCard_english">
+    <div class="menu-col-top">
+      <div class="menu-col-title">
+        <span class="pos-pill right-en">RIGHT (ENGLISH) ▶</span>
+        <span>INDIAN POST — 10 Pages (Calligraphic)</span>
+      </div>
+      <div style="display:flex; gap:4px;">
+        <button class="page-tab-live-btn" style="background:#dc2626; color:#fff; border:none;" onclick="switchAndLiveRunAll('english')">⚡ Run All 10</button>
+        <button class="page-tab-live-btn" style="background:#2563eb; color:#fff; border:none;" onclick="openEditorForEditionPage('english', COMPARE_PAGES.english)">✏️ Edit</button>
+      </div>
+    </div>
+    <div class="menu-10pages-row" id="topMenuPages_english"></div>
   </div>
 </div>
 
-<!-- 10-PAGE NAVIGATION RIBBON -->
-<nav class="page-ribbon" id="pageRibbon"></nav>
+<!-- SYNCHRONIZED PAGE COMPARISON BAR (COMPARE P01..P10 SIDE BY SIDE) -->
+<div class="sync-compare-bar">
+  <div class="sync-pages-strip">
+    <span style="font-size:11px; font-weight:900; color:#fde047; margin-right:4px;">🔍 COMPARE SAME PAGE ACROSS ALL 3 EDITIONS:</span>
+    <div id="syncComparePageBtns" style="display:inline-flex; gap:4px; flex-wrap:wrap;"></div>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <label class="auto-redraw-toggle" style="background:rgba(56,189,248,0.16); border-color:rgba(56,189,248,0.45); color:#bae6fd;">
+      <input type="checkbox" id="lock3ColumnsSamePage" checked>
+      🔗 Lock 3 Columns to Same Page
+    </label>
+    <label class="auto-redraw-toggle" style="background:rgba(245,158,11,0.16); border-color:rgba(245,158,11,0.45); color:#fde68a;">
+      <input type="checkbox" id="sync3ColScroll" checked>
+      ↕️ Sync 3-Column Scroll
+    </label>
+    <button class="btn btn-live" style="padding:5px 11px;" onclick="triggerLiveBuildAll3ColumnsCurrentPage()">
+      ⚡ Live Draw All 3 Columns (Hindi → Gujarati → English) for Page <span id="syncCurPageBadge">01</span> in PD
+    </button>
+  </div>
+</div>
 
-<!-- SPLIT WORKSPACE -->
-<main class="workspace">
+<!-- 10-PAGE NAVIGATION RIBBON (SHOWN IN SINGLE-PAGE EDITOR MODE) -->
+<nav class="page-ribbon" id="pageRibbon" style="display:none;"></nav>
+
+<!-- DEFAULT WORKSPACE: 3-COLUMN SIDE-BY-SIDE COMPARISON (LEFT: HINDI | CENTER: GUJARATI | RIGHT: ENGLISH) -->
+<main class="compare-3col-workspace" id="compare3ColWorkspace">
+  <!-- LEFT COLUMN: HINDI (आस-पास) -->
+  <section class="compare-col" id="colWrap_hindi">
+    <div class="compare-col-header">
+      <div class="compare-col-title-row">
+        <div class="compare-col-main-title">
+          <span class="pos-pill left-hi">◀ LEFT</span>
+          <span id="colHeaderTitle_hindi">हिन्दी — आस-पास (PAGE 01)</span>
+        </div>
+        <span style="font-size:10.5px; font-weight:800; color:#93c5fd;" id="colSecBadge_hindi">मुख्य पृष्ठ (FRONT PAGE)</span>
+      </div>
+      <div class="compare-col-sub" id="colSub_hindi">8-Col आस-पास Calligraphic Masthead • Same-to-Same Hindi Layout</div>
+      <div class="compare-col-actions">
+        <button class="btn-col-live" onclick="triggerLiveBuildSpecific('hindi', COMPARE_PAGES.hindi, 'redraw')">
+          ⚡ LIVE BUILD HINDI P-<span id="btnColPage_hindi">01</span> IN PAGE DESIGNER
+        </button>
+        <button class="btn-col-script" title="Run build_hindi_page_XX_same_to_same.py from scratch" onclick="triggerLiveBuildSpecific('hindi', COMPARE_PAGES.hindi, 'script')">
+          🔨 Script
+        </button>
+        <button class="btn-col-edit" onclick="openEditorForEditionPage('hindi', COMPARE_PAGES.hindi)">
+          ✏️ Edit Page
+        </button>
+      </div>
+    </div>
+    <div class="compare-canvas-scroll" id="scrollCol_hindi" onscroll="onCompareColScroll('hindi')">
+      <div class="compare-page-img-wrap" onclick="triggerLiveBuildSpecific('hindi', COMPARE_PAGES.hindi, 'redraw')" title="Click anywhere on this Hindi page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+        <img id="compareImg_hindi" class="compare-page-img" src="/saved_pages/Hindi_Page_01.png" alt="Hindi Page Preview">
+      </div>
+      <div class="click-to-draw-pill">⚡ Click Page to Open &amp; Draw Live in Page Designer 1.0</div>
+    </div>
+  </section>
+
+  <!-- CENTER COLUMN: GUJARATI (ગુજરાત સમાચાર — ORIGINAL MASTER IN CENTER) -->
+  <section class="compare-col center-gujarati-col" id="colWrap_gujarati">
+    <div class="compare-col-header">
+      <div class="compare-col-title-row">
+        <div class="compare-col-main-title">
+          <span class="pos-pill center-gu">★ CENTER MASTER ★</span>
+          <span id="colHeaderTitle_gujarati">ગુજરાતી — ગુજરાત સમાચાર (PAGE 01)</span>
+        </div>
+        <span style="font-size:10.5px; font-weight:800; color:#fde047;" id="colSecBadge_gujarati">પહેલું પાનું (FRONT PAGE)</span>
+      </div>
+      <div class="compare-col-sub" id="colSub_gujarati">8-Col ગુજરાત સમાચાર Original Master Layout in Center</div>
+      <div class="compare-col-actions">
+        <button class="btn-col-live" style="background:linear-gradient(135deg,#f59e0b,#dc2626); border-color:#fef08a;" onclick="triggerLiveBuildSpecific('gujarati', COMPARE_PAGES.gujarati, 'redraw')">
+          ⚡ LIVE BUILD GUJARATI P-<span id="btnColPage_gujarati">01</span> IN PAGE DESIGNER
+        </button>
+        <button class="btn-col-script" title="Run build_page_XX_same_to_same.py from scratch" onclick="triggerLiveBuildSpecific('gujarati', COMPARE_PAGES.gujarati, 'script')">
+          🔨 Script
+        </button>
+        <button class="btn-col-edit" onclick="openEditorForEditionPage('gujarati', COMPARE_PAGES.gujarati)">
+          ✏️ Edit Page
+        </button>
+      </div>
+    </div>
+    <div class="compare-canvas-scroll" id="scrollCol_gujarati" onscroll="onCompareColScroll('gujarati')">
+      <div class="compare-page-img-wrap" onclick="triggerLiveBuildSpecific('gujarati', COMPARE_PAGES.gujarati, 'redraw')" title="Click anywhere on this Gujarati page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+        <img id="compareImg_gujarati" class="compare-page-img" src="/saved_pages/Gujarati_Page_01.png" alt="Gujarati Page Preview">
+      </div>
+      <div class="click-to-draw-pill">★ Click Gujarati Master Page to Open &amp; Draw Live in Page Designer 1.0 ★</div>
+    </div>
+  </section>
+
+  <!-- RIGHT COLUMN: ENGLISH (INDIAN POST) -->
+  <section class="compare-col" id="colWrap_english">
+    <div class="compare-col-header">
+      <div class="compare-col-title-row">
+        <div class="compare-col-main-title">
+          <span class="pos-pill right-en">RIGHT ▶</span>
+          <span id="colHeaderTitle_english">ENGLISH — INDIAN POST (PAGE 01)</span>
+        </div>
+        <span style="font-size:10.5px; font-weight:800; color:#6ee7b7;" id="colSecBadge_english">FRONT PAGE (INDIAN POST)</span>
+      </div>
+      <div class="compare-col-sub" id="colSub_english">8-Col INDIAN POST Calligraphic Masthead • Same-to-Same English Layout</div>
+      <div class="compare-col-actions">
+        <button class="btn-col-live" onclick="triggerLiveBuildSpecific('english', COMPARE_PAGES.english, 'redraw')">
+          ⚡ LIVE BUILD ENGLISH P-<span id="btnColPage_english">01</span> IN PAGE DESIGNER
+        </button>
+        <button class="btn-col-script" title="Run build_english_page_XX_same_to_same.py from scratch" onclick="triggerLiveBuildSpecific('english', COMPARE_PAGES.english, 'script')">
+          🔨 Script
+        </button>
+        <button class="btn-col-edit" onclick="openEditorForEditionPage('english', COMPARE_PAGES.english)">
+          ✏️ Edit Page
+        </button>
+      </div>
+    </div>
+    <div class="compare-canvas-scroll" id="scrollCol_english" onscroll="onCompareColScroll('english')">
+      <div class="compare-page-img-wrap" onclick="triggerLiveBuildSpecific('english', COMPARE_PAGES.english, 'redraw')" title="Click anywhere on this English page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+        <img id="compareImg_english" class="compare-page-img" src="/saved_pages/English_Page_01.png" alt="English Page Preview">
+      </div>
+      <div class="click-to-draw-pill">⚡ Click Page to Open &amp; Draw Live in Page Designer 1.0</div>
+    </div>
+  </section>
+</main>
+
+<!-- SPLIT WORKSPACE (SINGLE-PAGE MULTI-COLUMN STORY & PHOTO EDITOR) -->
+<main class="workspace" id="singleEditorWorkspace" style="display:none;">
   <!-- LEFT PANE: INTERACTIVE HIGH-RES DUMMY PREVIEW -->
   <section class="preview-pane">
     <div class="preview-toolbar">
-      <div class="preview-page-label" id="previewHeaderTitle">PAGE 01 — પહેલું પાનું (FRONT PAGE)</div>
+      <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+        <button class="btn" style="background:#f59e0b; color:#0f172a; padding:3px 9px; font-size:11px;" onclick="setWorkspaceMode('compare')">
+          ⬅ Back to 3-Column Compare
+        </button>
+        <div class="preview-page-label" id="previewHeaderTitle">PAGE 01 — પહેલું પાનું (FRONT PAGE)</div>
+      </div>
       <div class="zoom-controls">
         <button class="zoom-btn active" onclick="setZoom('fit', this)">Fit</button>
         <button class="zoom-btn" onclick="setZoom('100%', this)">100%</button>
         <button class="zoom-btn" onclick="setZoom('145%', this)">145%</button>
         <button class="zoom-btn" onclick="setZoom('190%', this)">190%</button>
         <button class="btn btn-live" style="padding:3px 9px; font-size:10.5px;" onclick="triggerLiveBuildCurrentPage('redraw')">
-          ⚡ Re-Draw in PD
+          ⚡ Re-Draw <span id="btnCurPageNum">01</span> in PD
+        </button>
+        <button class="btn btn-save-live" id="btnSaveAndLive" style="padding:3px 9px; font-size:10.5px;" onclick="saveCurrentPageEdits(true)">
+          💾 Save &amp; Live Re-Draw
+        </button>
+        <button class="btn btn-save-quick" id="btnSaveQuick" style="padding:3px 9px; font-size:10.5px;" onclick="saveCurrentPageEdits(false)">
+          ✓ Quick Save
         </button>
       </div>
     </div>
     <div class="preview-canvas-wrap" id="previewCanvasWrap">
-      <img id="livePreviewImg" class="preview-img" src="" alt="Live Page Designer Preview">
+      <img id="livePreviewImg" class="preview-img" src="" alt="Live Page Designer Preview" onclick="triggerLiveBuildCurrentPage('redraw')" style="cursor:pointer;" title="Click to Re-Draw Live in Page Designer 1.0">
     </div>
   </section>
 
@@ -1277,7 +1733,10 @@
 
 <script>
   let STUDIO_STATE = { pages: [], library_photos: [] };
-  let CURRENT_EDITION = 'english'; // 'gujarati' | 'hindi' | 'english'
+  let COMPARE_OVERVIEW = null;
+  let WORKSPACE_MODE = 'compare'; // 'compare' (3-column default) | 'editor'
+  let COMPARE_PAGES = { hindi: 1, gujarati: 1, english: 1 };
+  let CURRENT_EDITION = 'gujarati'; // 'gujarati' | 'hindi' | 'english'
   let CURRENT_PAGE_NUM = 1;
   let ACTIVE_SLOT_ID = 'all_slots';
   let PENDING_STORY_UPDATES = {}; // { story_id: [segments] }
@@ -1285,24 +1744,246 @@
   let ACTIVE_UPLOAD_ASSET_ID = null;
   let GROUPED_SLOTS_CACHE = {}; // { page_num: [slots] }
   let INITIAL_LOAD_DONE = false;
+  let _IS_SYNCING_SCROLL = false;
 
   const EDITION_META = {
     gujarati: {
-      pill: 'ગુજરાત સમાચાર • Port 47898',
-      status: 'Active Edition: 1. ગુજરાતી — ગુજરાત સમાચાર (10 Pages Same-to-Same)',
+      pill: '★ ગુજરાત સમાચાર (CENTER) • Port 47898',
+      status: 'Active Edition: ગુજરાતી — ગુજરાત સમાચાર (10 Pages Same-to-Same)',
       searchPlaceholder: '🔍 Search Gujarati text, headline, or story ID...',
+      shortTitle: 'ગુજરાતી — ગુજરાત સમાચાર',
     },
     hindi: {
-      pill: 'आस-पास (हिन्दी) • Port 47898',
-      status: 'Active Edition: 2. हिन्दी — आस-पास (10 Pages Same-to-Same)',
+      pill: '◀ आस-पास (हिन्दी LEFT) • Port 47898',
+      status: 'Active Edition: हिन्दी — आस-पास (10 Pages Same-to-Same)',
       searchPlaceholder: '🔍 Search Hindi text, headline, or story ID...',
+      shortTitle: 'हिन्दी — आस-पास',
     },
     english: {
-      pill: 'INDIAN POST (ENGLISH) • Port 47898',
-      status: 'Active Edition: 3. ENGLISH — INDIAN POST (Shaily Calligraphic Masthead • WebP Fast Assets)',
+      pill: 'INDIAN POST (ENGLISH RIGHT) ▶ • Port 47898',
+      status: 'Active Edition: ENGLISH — INDIAN POST (Shaily Calligraphic Masthead • WebP Fast Assets)',
       searchPlaceholder: '🔍 Search English text, headline, or story ID...',
+      shortTitle: 'ENGLISH — INDIAN POST',
     },
   };
+
+  function setWorkspaceMode(mode) {
+    WORKSPACE_MODE = mode === 'editor' ? 'editor' : 'compare';
+    const compEl = document.getElementById('compare3ColWorkspace');
+    const editEl = document.getElementById('singleEditorWorkspace');
+    const ribEl = document.getElementById('pageRibbon');
+    const btnComp = document.getElementById('btnViewModeCompare');
+    const btnEdit = document.getElementById('btnViewModeEditor');
+
+    if (WORKSPACE_MODE === 'compare') {
+      compEl.style.display = 'grid';
+      editEl.style.display = 'none';
+      ribEl.style.display = 'none';
+      btnComp.style.background = 'linear-gradient(135deg,#f59e0b,#dc2626)';
+      btnComp.style.border = '1px solid #fef08a';
+      btnEdit.style.border = '1px solid transparent';
+    } else {
+      compEl.style.display = 'none';
+      editEl.style.display = 'grid';
+      ribEl.style.display = 'flex';
+      btnComp.style.background = '#334155';
+      btnComp.style.border = '1px solid #475569';
+      btnEdit.style.border = '1px solid #fef08a';
+    }
+  }
+
+  async function openEditorForEditionPage(editionKey, pageNum) {
+    CURRENT_EDITION = editionKey;
+    CURRENT_PAGE_NUM = pageNum;
+    setWorkspaceMode('editor');
+    await loadStudioState(true, false);
+    showToast(`✏️ Opened Multi-Column Story & Photo Editor for ${EDITION_META[editionKey].shortTitle} — Page ${String(pageNum).padStart(2, '0')}`);
+  }
+
+  async function loadCompareOverview() {
+    try {
+      const resp = await fetch('/api/compare-overview');
+      const data = await resp.json();
+      if (data && data.ok) {
+        COMPARE_OVERVIEW = data;
+        renderTop3ColMenusAndColumns();
+      }
+    } catch (err) {
+      console.error('Compare overview error:', err);
+    }
+  }
+
+  function renderTop3ColMenusAndColumns() {
+    if (!COMPARE_OVERVIEW || !COMPARE_OVERVIEW.editions) return;
+
+    // 1. Render 10-page buttons inside each of the 3 Top Menu Cards (Left=Hindi, Center=Gujarati, Right=English)
+    ['hindi', 'gujarati', 'english'].forEach(edKey => {
+      const container = document.getElementById('topMenuPages_' + edKey);
+      if (!container) return;
+      const activeP = COMPARE_PAGES[edKey] || 1;
+      const btns = [];
+      for (let p = 1; p <= 10; p++) {
+        const pstr = String(p).padStart(2, '0');
+        const isAct = p === activeP ? 'active' : '';
+        btns.push(
+          `<button class="mini-pbtn ${isAct}" title="Click to view ${edKey.toUpperCase()} Page ${pstr} &amp; Live Draw in Page Designer 1.0" onclick="onTopEditionPageClick('${edKey}', ${p})">P${pstr}</button>`
+        );
+      }
+      container.innerHTML = btns.join('');
+    });
+
+    // 2. Render Synchronized Page Comparison Bar (P01..P10)
+    const syncContainer = document.getElementById('syncComparePageBtns');
+    if (syncContainer) {
+      const syncPage = COMPARE_PAGES.gujarati || 1;
+      const sBtns = [];
+      for (let p = 1; p <= 10; p++) {
+        const pstr = String(p).padStart(2, '0');
+        const isAct = (COMPARE_PAGES.hindi === p && COMPARE_PAGES.gujarati === p && COMPARE_PAGES.english === p) ? 'active' : '';
+        const lbl = p === 1 ? `P01 (FRONT PAGE)` : `P${pstr}`;
+        sBtns.push(
+          `<button class="sync-pbtn ${isAct}" onclick="selectSynchronizedComparePage(${p}, true)">${lbl}</button>`
+        );
+      }
+      syncContainer.innerHTML = sBtns.join('');
+      const badgeEl = document.getElementById('syncCurPageBadge');
+      if (badgeEl) badgeEl.textContent = String(syncPage).padStart(2, '0');
+    }
+
+    // 3. Update the 3 Columns (Left=Hindi, Center=Gujarati, Right=English)
+    ['hindi', 'gujarati', 'english'].forEach(edKey => {
+      const edData = COMPARE_OVERVIEW.editions[edKey];
+      if (!edData) return;
+      const pnum = COMPARE_PAGES[edKey] || 1;
+      const pstr = String(pnum).padStart(2, '0');
+      const pg = (edData.pages || []).find(x => x.page_number === pnum) || edData.pages[0];
+      if (!pg) return;
+
+      const titleEl = document.getElementById('colHeaderTitle_' + edKey);
+      if (titleEl) titleEl.textContent = `${EDITION_META[edKey].shortTitle} (PAGE ${pstr})`;
+
+      const secEl = document.getElementById('colSecBadge_' + edKey);
+      if (secEl) secEl.textContent = pg.section;
+
+      const subEl = document.getElementById('colSub_' + edKey);
+      if (subEl) subEl.textContent = `${pg.title} • ${pg.subtitle}`;
+
+      const btnP = document.getElementById('btnColPage_' + edKey);
+      if (btnP) btnP.textContent = pstr;
+
+      const imgEl = document.getElementById('compareImg_' + edKey);
+      if (imgEl && imgEl.getAttribute('src') !== pg.png_url) {
+        imgEl.src = pg.png_url;
+      }
+    });
+  }
+
+  function onTopEditionPageClick(editionKey, pageNum) {
+    const lockSame = document.getElementById('lock3ColumnsSamePage')?.checked;
+    if (lockSame) {
+      COMPARE_PAGES.hindi = pageNum;
+      COMPARE_PAGES.gujarati = pageNum;
+      COMPARE_PAGES.english = pageNum;
+    } else {
+      COMPARE_PAGES[editionKey] = pageNum;
+    }
+    CURRENT_EDITION = editionKey;
+    CURRENT_PAGE_NUM = pageNum;
+    renderTop3ColMenusAndColumns();
+
+    // Reset scroll to top when switching pages
+    ['hindi', 'gujarati', 'english'].forEach(k => {
+      const sc = document.getElementById('scrollCol_' + k);
+      if (sc && (lockSame || k === editionKey)) sc.scrollTop = 0;
+    });
+
+    const autoRedraw = document.getElementById('autoRedrawOnClick')?.checked;
+    if (WORKSPACE_MODE === 'editor') {
+      loadStudioState(true, Boolean(autoRedraw));
+    } else if (autoRedraw) {
+      triggerLiveBuildSpecific(editionKey, pageNum, 'redraw');
+    } else {
+      showToast(`📄 Showing ${EDITION_META[editionKey].shortTitle} — Page ${String(pageNum).padStart(2, '0')}`);
+    }
+  }
+
+  function selectSynchronizedComparePage(pageNum, triggerLiveInCenter = false) {
+    COMPARE_PAGES.hindi = pageNum;
+    COMPARE_PAGES.gujarati = pageNum;
+    COMPARE_PAGES.english = pageNum;
+    CURRENT_PAGE_NUM = pageNum;
+    renderTop3ColMenusAndColumns();
+    ['hindi', 'gujarati', 'english'].forEach(k => {
+      const sc = document.getElementById('scrollCol_' + k);
+      if (sc) sc.scrollTop = 0;
+    });
+    const autoRedraw = document.getElementById('autoRedrawOnClick')?.checked;
+    if (triggerLiveInCenter && autoRedraw) {
+      triggerLiveBuildSpecific(CURRENT_EDITION || 'gujarati', pageNum, 'redraw');
+    } else {
+      showToast(`🔍 Comparing Page ${String(pageNum).padStart(2, '0')} across Left: हिन्दी (आस-पास) • Center: ગુજરાતી (ગુજરાત સમાચાર) • Right: ENGLISH (INDIAN POST)`);
+    }
+  }
+
+  function onCompareColScroll(sourceKey) {
+    if (_IS_SYNCING_SCROLL) return;
+    const syncScroll = document.getElementById('sync3ColScroll')?.checked;
+    if (!syncScroll) return;
+    const srcEl = document.getElementById('scrollCol_' + sourceKey);
+    if (!srcEl) return;
+    const maxSrc = srcEl.scrollHeight - srcEl.clientHeight;
+    if (maxSrc <= 0) return;
+    const ratio = srcEl.scrollTop / maxSrc;
+
+    _IS_SYNCING_SCROLL = true;
+    ['hindi', 'gujarati', 'english'].forEach(k => {
+      if (k === sourceKey) return;
+      const dstEl = document.getElementById('scrollCol_' + k);
+      if (dstEl) {
+        const maxDst = dstEl.scrollHeight - dstEl.clientHeight;
+        if (maxDst > 0) dstEl.scrollTop = ratio * maxDst;
+      }
+    });
+    requestAnimationFrame(() => { _IS_SYNCING_SCROLL = false; });
+  }
+
+  async function triggerLiveBuildSpecific(editionKey, pageNum, mode = 'redraw') {
+    CURRENT_EDITION = editionKey;
+    CURRENT_PAGE_NUM = pageNum;
+    ['hindi', 'gujarati', 'english'].forEach(k => {
+      const mc = document.getElementById('menuCard_' + k);
+      if (mc) mc.classList.toggle('active-edition', k === editionKey);
+    });
+    const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '30', 10);
+    const pstr = String(pageNum).padStart(2, '0');
+    try {
+      showToast(
+        mode === 'script'
+          ? `🔨 Running Python Builder Script for ${EDITION_META[editionKey].shortTitle} — Page ${pstr} live in Page Designer 1.0...`
+          : `⚡ Opening ${EDITION_META[editionKey].shortTitle} — Page ${pstr} in Page Designer 1.0 & Drawing Live Step-by-Step from Start!`,
+        5500
+      );
+      const resp = await fetch(`/api/live-build?edition=${encodeURIComponent(editionKey)}&page=${pageNum}&speed=${stepMs}&mode=${mode}`);
+      const res = await resp.json();
+      if (!res.ok) throw new Error(res.error || 'Live build failed');
+    } catch (err) {
+      showToast('Live Build error: ' + err.message, 4500);
+    }
+  }
+
+  async function triggerLiveBuildAll3ColumnsCurrentPage() {
+    const pnum = COMPARE_PAGES.gujarati || 1;
+    const pstr = String(pnum).padStart(2, '0');
+    const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '25', 10);
+    try {
+      showToast(`⚡ Live Drawing All 3 Columns (Hindi P${pstr} → Gujarati P${pstr} → English P${pstr}) sequentially in Page Designer 1.0!`, 8000);
+      const resp = await fetch(`/api/live-build-page-trio?page=${pnum}&speed=${stepMs}`);
+      const res = await resp.json();
+      if (!res.ok) throw new Error(res.error || 'Live trio build failed');
+    } catch (err) {
+      showToast('Error: ' + err.message, 4500);
+    }
+  }
 
   async function switchEdition(editionKey) {
     if (!['gujarati', 'hindi', 'english'].includes(editionKey)) return;
@@ -2200,6 +2881,7 @@
       const nStories = res.replaced_stories ?? 0;
       const nPhotos = res.replaced_photos ?? 0;
 
+      await loadCompareOverview();
       await loadStudioState(true, false);
       showToast(
         liveBuildAfter
@@ -2218,27 +2900,19 @@
     if (pageNum !== CURRENT_PAGE_NUM) {
       selectPage(pageNum, 'all_slots', false);
     }
-    const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '35', 10);
-    try {
-      const pstr = String(pageNum).padStart(2, '0');
-      showToast(`⚡ Re-Drawing ${CURRENT_EDITION.toUpperCase()} Page ${pstr} live step-by-step in Page Designer 1.0 (Edit Mode)...`, 5000);
-      const resp = await fetch(`/api/live-build?edition=${encodeURIComponent(CURRENT_EDITION)}&page=${pageNum}&speed=${stepMs}&mode=${mode}`);
-      const res = await resp.json();
-      if (!res.ok) throw new Error(res.error || 'Live re-draw failed');
-    } catch (err) {
-      showToast('Live Re-Draw error: ' + err.message, 4500);
-    }
+    await triggerLiveBuildSpecific(CURRENT_EDITION, pageNum, mode);
   }
 
   function triggerLiveBuildCurrentPage(mode = 'redraw') {
     triggerLiveBuildPage(CURRENT_PAGE_NUM, mode);
   }
 
-  async function triggerLiveBuildAllPages() {
-    const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '35', 10);
+  async function triggerLiveBuildAllPages(editionOverride = null) {
+    const edKey = editionOverride || CURRENT_EDITION;
+    const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '30', 10);
     try {
-      showToast(`🎬 Re-Drawing ALL 10 ${CURRENT_EDITION.toUpperCase()} Pages sequentially in Page Designer 1.0...`, 8000);
-      const resp = await fetch(`/api/live-build?edition=${encodeURIComponent(CURRENT_EDITION)}&all=1&speed=${stepMs}`);
+      showToast(`🎬 Re-Drawing ALL 10 ${EDITION_META[edKey].shortTitle} Pages sequentially in Page Designer 1.0...`, 8000);
+      const resp = await fetch(`/api/live-build?edition=${encodeURIComponent(edKey)}&all=1&speed=${stepMs}`);
       const res = await resp.json();
       if (!res.ok) throw new Error(res.error || 'Live build all failed');
     } catch (err) {
@@ -2247,8 +2921,8 @@
   }
 
   async function switchAndLiveRunAll(editionKey) {
-    await switchEdition(editionKey);
-    await triggerLiveBuildAllPages();
+    CURRENT_EDITION = editionKey;
+    await triggerLiveBuildAllPages(editionKey);
   }
 
   async function triggerAutoRunAll3Editions() {
@@ -2262,8 +2936,10 @@
     }
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    loadStudioState(false, false);
+  window.addEventListener('DOMContentLoaded', async () => {
+    setWorkspaceMode('compare');
+    await loadCompareOverview();
+    await loadStudioState(false, false);
   });
 </script>
 </body>
