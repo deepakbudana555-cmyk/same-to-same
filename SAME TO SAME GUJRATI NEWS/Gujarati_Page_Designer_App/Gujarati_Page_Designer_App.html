@@ -1409,6 +1409,18 @@
     display: flex;
     justify-content: center;
     cursor: pointer;
+    background:
+      repeating-linear-gradient(
+        to right,
+        rgba(168, 85, 247, 0.14) 0px,
+        rgba(168, 85, 247, 0.14) 1px,
+        transparent 1px,
+        transparent 12.5%
+      ),
+      #ffffff;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
   }
 
   .compare-page-img {
@@ -1417,13 +1429,44 @@
     background: #ffffff;
     padding: 3px;
     border-radius: 4px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
-    transition: transform 0.14s ease, box-shadow 0.14s ease;
+    transition: box-shadow 0.14s ease;
     display: block;
   }
 
-  .compare-page-img-wrap:hover .compare-page-img {
+  .compare-page-img-wrap:hover {
     box-shadow: 0 0 0 3px #ef4444, 0 14px 36px rgba(220, 38, 38, 0.45);
+  }
+
+  .live-draw-laser-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #f59e0b, #ef4444, #fde047, #ef4444, #f59e0b);
+    box-shadow: 0 0 16px 4px rgba(239, 68, 68, 0.85);
+    pointer-events: none;
+    z-index: 8;
+    display: none;
+  }
+
+  .live-draw-status-banner {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    background: rgba(15, 23, 42, 0.92);
+    color: #fef08a;
+    border: 1.5px solid #ef4444;
+    border-radius: 7px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 900;
+    z-index: 9;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+    pointer-events: none;
   }
 
   .click-to-draw-pill {
@@ -1574,7 +1617,12 @@
       </div>
     </div>
     <div class="compare-canvas-scroll" id="scrollCol_hindi" onscroll="onCompareColScroll('hindi')">
-      <div class="compare-page-img-wrap" onclick="triggerLiveBuildSpecific('hindi', COMPARE_PAGES.hindi, 'redraw')" title="Click anywhere on this Hindi page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+      <div class="compare-page-img-wrap" id="imgWrap_hindi" onclick="triggerLiveBuildSpecific('hindi', COMPARE_PAGES.hindi, 'redraw')" title="Click anywhere on this Hindi page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+        <div class="live-draw-status-banner" id="drawBanner_hindi">
+          <span>⚡ LIVE DRAWING HINDI P-01...</span>
+          <span id="drawPct_hindi">0%</span>
+        </div>
+        <div class="live-draw-laser-bar" id="drawLaser_hindi"></div>
         <img id="compareImg_hindi" class="compare-page-img" src="/saved_pages/Hindi_Page_01.png" alt="Hindi Page Preview">
       </div>
       <div class="click-to-draw-pill">⚡ Click Page to Open &amp; Draw Live in Page Designer 1.0</div>
@@ -1605,7 +1653,12 @@
       </div>
     </div>
     <div class="compare-canvas-scroll" id="scrollCol_gujarati" onscroll="onCompareColScroll('gujarati')">
-      <div class="compare-page-img-wrap" onclick="triggerLiveBuildSpecific('gujarati', COMPARE_PAGES.gujarati, 'redraw')" title="Click anywhere on this Gujarati page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+      <div class="compare-page-img-wrap" id="imgWrap_gujarati" onclick="triggerLiveBuildSpecific('gujarati', COMPARE_PAGES.gujarati, 'redraw')" title="Click anywhere on this Gujarati page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+        <div class="live-draw-status-banner" id="drawBanner_gujarati">
+          <span>★ LIVE DRAWING GUJARATI MASTER P-01...</span>
+          <span id="drawPct_gujarati">0%</span>
+        </div>
+        <div class="live-draw-laser-bar" id="drawLaser_gujarati"></div>
         <img id="compareImg_gujarati" class="compare-page-img" src="/saved_pages/Gujarati_Page_01.png" alt="Gujarati Page Preview">
       </div>
       <div class="click-to-draw-pill">★ Click Gujarati Master Page to Open &amp; Draw Live in Page Designer 1.0 ★</div>
@@ -1636,7 +1689,12 @@
       </div>
     </div>
     <div class="compare-canvas-scroll" id="scrollCol_english" onscroll="onCompareColScroll('english')">
-      <div class="compare-page-img-wrap" onclick="triggerLiveBuildSpecific('english', COMPARE_PAGES.english, 'redraw')" title="Click anywhere on this English page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+      <div class="compare-page-img-wrap" id="imgWrap_english" onclick="triggerLiveBuildSpecific('english', COMPARE_PAGES.english, 'redraw')" title="Click anywhere on this English page to open &amp; draw it live step-by-step in Page Designer 1.0!">
+        <div class="live-draw-status-banner" id="drawBanner_english">
+          <span>⚡ LIVE DRAWING ENGLISH P-01...</span>
+          <span id="drawPct_english">0%</span>
+        </div>
+        <div class="live-draw-laser-bar" id="drawLaser_english"></div>
         <img id="compareImg_english" class="compare-page-img" src="/saved_pages/English_Page_01.png" alt="English Page Preview">
       </div>
       <div class="click-to-draw-pill">⚡ Click Page to Open &amp; Draw Live in Page Designer 1.0</div>
@@ -1878,6 +1936,54 @@
     });
   }
 
+  const _COL_ANIM_TIMERS = { hindi: null, gujarati: null, english: null };
+
+  function animateBrowserColumnLiveDraw(editionKey, pageNum, durationMs = 2400) {
+    const imgEl = document.getElementById('compareImg_' + editionKey);
+    const bannerEl = document.getElementById('drawBanner_' + editionKey);
+    const pctEl = document.getElementById('drawPct_' + editionKey);
+    const laserEl = document.getElementById('drawLaser_' + editionKey);
+    if (!imgEl) return;
+
+    if (_COL_ANIM_TIMERS[editionKey]) {
+      cancelAnimationFrame(_COL_ANIM_TIMERS[editionKey]);
+      _COL_ANIM_TIMERS[editionKey] = null;
+    }
+
+    const pstr = String(pageNum).padStart(2, '0');
+    if (bannerEl) {
+      bannerEl.style.display = 'flex';
+      bannerEl.firstElementChild.textContent = `⚡ LIVE DRAWING ${editionKey.toUpperCase()} P-${pstr} IN PD & UI...`;
+    }
+    if (laserEl) {
+      laserEl.style.display = 'block';
+      laserEl.style.top = '0%';
+    }
+
+    const tStart = performance.now();
+    function stepFrame(now) {
+      const elapsed = now - tStart;
+      const prog = Math.min(1.0, elapsed / durationMs);
+      const pct = Math.round(prog * 100);
+      const hideBottom = Math.max(0, 100 - prog * 100);
+      imgEl.style.clipPath = `inset(0 0 ${hideBottom.toFixed(1)}% 0)`;
+      if (laserEl) laserEl.style.top = `${(prog * 100).toFixed(1)}%`;
+      if (pctEl) {
+        const stage = pct < 18 ? 'Masthead' : (pct < 45 ? 'Lead Story & Photos' : (pct < 80 ? 'Columns & Boxes' : 'Bottom Fold & Ads'));
+        pctEl.textContent = `${stage} • ${pct}%`;
+      }
+      if (prog < 1.0) {
+        _COL_ANIM_TIMERS[editionKey] = requestAnimationFrame(stepFrame);
+      } else {
+        imgEl.style.clipPath = 'none';
+        if (laserEl) laserEl.style.display = 'none';
+        if (bannerEl) bannerEl.style.display = 'none';
+        _COL_ANIM_TIMERS[editionKey] = null;
+      }
+    }
+    _COL_ANIM_TIMERS[editionKey] = requestAnimationFrame(stepFrame);
+  }
+
   function onTopEditionPageClick(editionKey, pageNum) {
     const lockSame = document.getElementById('lock3ColumnsSamePage')?.checked;
     if (lockSame) {
@@ -1896,6 +2002,12 @@
       const sc = document.getElementById('scrollCol_' + k);
       if (sc && (lockSame || k === editionKey)) sc.scrollTop = 0;
     });
+
+    if (lockSame) {
+      ['hindi', 'gujarati', 'english'].forEach(k => animateBrowserColumnLiveDraw(k, pageNum, 2200));
+    } else {
+      animateBrowserColumnLiveDraw(editionKey, pageNum, 2200);
+    }
 
     const autoRedraw = document.getElementById('autoRedrawOnClick')?.checked;
     if (WORKSPACE_MODE === 'editor') {
@@ -1916,6 +2028,7 @@
     ['hindi', 'gujarati', 'english'].forEach(k => {
       const sc = document.getElementById('scrollCol_' + k);
       if (sc) sc.scrollTop = 0;
+      animateBrowserColumnLiveDraw(k, pageNum, 2200);
     });
     const autoRedraw = document.getElementById('autoRedrawOnClick')?.checked;
     if (triggerLiveInCenter && autoRedraw) {
@@ -1954,6 +2067,7 @@
       const mc = document.getElementById('menuCard_' + k);
       if (mc) mc.classList.toggle('active-edition', k === editionKey);
     });
+    animateBrowserColumnLiveDraw(editionKey, pageNum, 2500);
     const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '30', 10);
     const pstr = String(pageNum).padStart(2, '0');
     try {
@@ -1975,6 +2089,7 @@
     const pnum = COMPARE_PAGES.gujarati || 1;
     const pstr = String(pnum).padStart(2, '0');
     const stepMs = parseInt(document.getElementById('buildSpeedInput').value || '25', 10);
+    ['hindi', 'gujarati', 'english'].forEach(k => animateBrowserColumnLiveDraw(k, pnum, 2600));
     try {
       showToast(`⚡ Live Drawing All 3 Columns (Hindi P${pstr} → Gujarati P${pstr} → English P${pstr}) sequentially in Page Designer 1.0!`, 8000);
       const resp = await fetch(`/api/live-build-page-trio?page=${pnum}&speed=${stepMs}`);

@@ -311,8 +311,186 @@ def localize_pagedesigner_asset_links():
 
 
 # ==============================================================================
-# DESKTOP FOCUS & PAGE DESIGNER RPC SESSION (macOS + Windows)
+# DESKTOP FOCUS & PAGE DESIGNER RPC SESSION (macOS + Windows WinSta0\Default)
 # ==============================================================================
+def _run_python_on_winsta0_default(code_str: str, timeout_ms: int = 3000) -> int:
+    """
+    Runs a short Python snippet explicitly on the interactive user desktop (`WinSta0\\Default`)
+    on Windows. Returns the process exit code (0 = success).
+    """
+    if sys.platform != "win32":
+        return 1
+    try:
+        kernel32 = ctypes.windll.kernel32
+
+        class STARTUPINFOW(ctypes.Structure):
+            _fields_ = [
+                ("cb", wintypes.DWORD),
+                ("lpReserved", wintypes.LPWSTR),
+                ("lpDesktop", wintypes.LPWSTR),
+                ("lpTitle", wintypes.LPWSTR),
+                ("dwX", wintypes.DWORD),
+                ("dwY", wintypes.DWORD),
+                ("dwXSize", wintypes.DWORD),
+                ("dwYSize", wintypes.DWORD),
+                ("dwXCountChars", wintypes.DWORD),
+                ("dwYCountChars", wintypes.DWORD),
+                ("dwFillAttribute", wintypes.DWORD),
+                ("dwFlags", wintypes.DWORD),
+                ("wShowWindow", wintypes.WORD),
+                ("cbReserved2", wintypes.WORD),
+                ("lpReserved2", ctypes.POINTER(wintypes.BYTE)),
+                ("hStdInput", wintypes.HANDLE),
+                ("hStdOutput", wintypes.HANDLE),
+                ("hStdError", wintypes.HANDLE),
+            ]
+
+        class PROCESS_INFORMATION(ctypes.Structure):
+            _fields_ = [
+                ("hProcess", wintypes.HANDLE),
+                ("hThread", wintypes.HANDLE),
+                ("dwProcessId", wintypes.DWORD),
+                ("dwThreadId", wintypes.DWORD),
+            ]
+
+        si = STARTUPINFOW()
+        si.cb = ctypes.sizeof(STARTUPINFOW)
+        si.lpDesktop = "WinSta0\\Default"
+        si.dwFlags = 1
+        si.wShowWindow = 0  # SW_HIDE helper console
+        pi = PROCESS_INFORMATION()
+
+        cmd_line = f'"{sys.executable}" -c "{code_str}"'
+        cmd_buf = ctypes.create_unicode_buffer(cmd_line)
+        if kernel32.CreateProcessW(
+            None,
+            cmd_buf,
+            None,
+            None,
+            False,
+            0x08000000,  # CREATE_NO_WINDOW
+            None,
+            None,
+            ctypes.byref(si),
+            ctypes.byref(pi),
+        ):
+            kernel32.WaitForSingleObject(pi.hProcess, timeout_ms)
+            exit_code = wintypes.DWORD(1)
+            kernel32.GetExitCodeProcess(pi.hProcess, ctypes.byref(exit_code))
+            kernel32.CloseHandle(pi.hProcess)
+            kernel32.CloseHandle(pi.hThread)
+            return int(exit_code.value)
+    except Exception:
+        pass
+    return 1
+
+
+def _win32_check_and_focus_pagedesigner(focus: bool = True) -> bool:
+    """
+    Checks on `WinSta0\\Default` whether a visible `Page Designer` window exists,
+    and optionally maximizes & brings it to the foreground above all browser windows.
+    """
+    if sys.platform != "win32":
+        return False
+    focus_flag = "1" if focus else "0"
+    snippet = (
+        "import ctypes, sys; u=ctypes.windll.user32; k=ctypes.windll.kernel32; "
+        "WNDENUMPROC=ctypes.WINFUNCTYPE(ctypes.c_bool,ctypes.c_void_p,ctypes.c_void_p); "
+        "found=[]; "
+        "def cb(h,l):\n"
+        " if u.IsWindowVisible(h):\n"
+        "  b=ctypes.create_unicode_buffer(260); u.GetWindowTextW(h,b,260); t=b.value or ''\n"
+        "  if 'Page Designer' in t and 'Studio' not in t and 'Chrome' not in t and 'Edge' not in t:\n"
+        "   found.append(h)\n"
+        " return True\n"
+        "u.EnumWindows(WNDENUMPROC(cb),0)\n"
+        "if not found: sys.exit(2)\n"
+        f"if {focus_flag}:\n"
+        " fg=u.GetForegroundWindow(); fg_tid=u.GetWindowThreadProcessId(fg,None); cur_tid=k.GetCurrentThreadId()\n"
+        " if fg_tid and fg_tid!=cur_tid: u.AttachThreadInput(fg_tid,cur_tid,True)\n"
+        " for h in found:\n"
+        "  if u.IsIconic(h): u.ShowWindow(h,9)\n"
+        "  u.ShowWindow(h,3)\n"
+        "  u.SetWindowPos(h,-1,0,0,0,0,0x0001|0x0002|0x0040)\n"
+        "  u.SetWindowPos(h,-2,0,0,0,0,0x0001|0x0002|0x0040)\n"
+        "  u.keybd_event(0x12,0,0,0); u.SetForegroundWindow(h); u.BringWindowToTop(h); u.keybd_event(0x12,0,2,0)\n"
+        " if fg_tid and fg_tid!=cur_tid: u.AttachThreadInput(fg_tid,cur_tid,False)\n"
+        "sys.exit(0)"
+    )
+    return _run_python_on_winsta0_default(snippet, timeout_ms=2500) == 0
+
+
+def _win32_launch_pagedesigner_on_winsta0(pd_exe: Path, port: int) -> bool:
+    """
+    Spawns `pagedesigner.exe --control <port>` explicitly on `WinSta0\\Default` (maximized)
+    so it is always visible on the user's real interactive desktop screen.
+    """
+    if sys.platform != "win32":
+        return False
+    try:
+        kernel32 = ctypes.windll.kernel32
+
+        class STARTUPINFOW(ctypes.Structure):
+            _fields_ = [
+                ("cb", wintypes.DWORD),
+                ("lpReserved", wintypes.LPWSTR),
+                ("lpDesktop", wintypes.LPWSTR),
+                ("lpTitle", wintypes.LPWSTR),
+                ("dwX", wintypes.DWORD),
+                ("dwY", wintypes.DWORD),
+                ("dwXSize", wintypes.DWORD),
+                ("dwYSize", wintypes.DWORD),
+                ("dwXCountChars", wintypes.DWORD),
+                ("dwYCountChars", wintypes.DWORD),
+                ("dwFillAttribute", wintypes.DWORD),
+                ("dwFlags", wintypes.DWORD),
+                ("wShowWindow", wintypes.WORD),
+                ("cbReserved2", wintypes.WORD),
+                ("lpReserved2", ctypes.POINTER(wintypes.BYTE)),
+                ("hStdInput", wintypes.HANDLE),
+                ("hStdOutput", wintypes.HANDLE),
+                ("hStdError", wintypes.HANDLE),
+            ]
+
+        class PROCESS_INFORMATION(ctypes.Structure):
+            _fields_ = [
+                ("hProcess", wintypes.HANDLE),
+                ("hThread", wintypes.HANDLE),
+                ("dwProcessId", wintypes.DWORD),
+                ("dwThreadId", wintypes.DWORD),
+            ]
+
+        os.environ["PAGEDESIGNER_CONTROL_PORT"] = str(port)
+        si = STARTUPINFOW()
+        si.cb = ctypes.sizeof(STARTUPINFOW)
+        si.lpDesktop = "WinSta0\\Default"
+        si.dwFlags = 1  # STARTF_USESHOWWINDOW
+        si.wShowWindow = 3  # SW_MAXIMIZE
+        pi = PROCESS_INFORMATION()
+
+        cmd_line = f'"{pd_exe}" --control {port}'
+        cmd_buf = ctypes.create_unicode_buffer(cmd_line)
+        ok = kernel32.CreateProcessW(
+            None,
+            cmd_buf,
+            None,
+            None,
+            False,
+            0,
+            None,
+            str(pd_exe.parent),
+            ctypes.byref(si),
+            ctypes.byref(pi),
+        )
+        if ok:
+            kernel32.CloseHandle(pi.hProcess)
+            kernel32.CloseHandle(pi.hThread)
+            return True
+    except Exception:
+        pass
+    return False
+
+
 def bring_pagedesigner_to_front() -> bool:
     if sys.platform == "darwin":
         try:
@@ -333,43 +511,7 @@ def bring_pagedesigner_to_front() -> bool:
     if sys.platform != "win32":
         return False
 
-    try:
-        user32 = ctypes.windll.user32
-        hdesk = user32.OpenDesktopW("default", 0, False, 0x01FF)
-        if hdesk:
-            user32.SetThreadDesktop(hdesk)
-
-        WNDENUMPROC = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
-        matched = []
-
-        def _cb(hwnd, lparam):
-            if user32.IsWindowVisible(hwnd):
-                buf = ctypes.create_unicode_buffer(260)
-                user32.GetWindowTextW(hwnd, buf, 260)
-                title = buf.value or ""
-                if (
-                    "Page Designer" in title
-                    and "Studio" not in title
-                    and "Chrome" not in title
-                    and "Edge" not in title
-                ):
-                    matched.append(hwnd)
-            return True
-
-        user32.EnumWindows(WNDENUMPROC(_cb), 0)
-        if not matched:
-            return False
-
-        for hwnd in matched:
-            user32.ShowWindow(hwnd, 3)  # SW_MAXIMIZE
-            user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0001 | 0x0002 | 0x0040)
-            user32.SetWindowPos(hwnd, -2, 0, 0, 0, 0, 0x0001 | 0x0002 | 0x0040)
-            user32.keybd_event(0x12, 0, 0, 0)
-            user32.SetForegroundWindow(hwnd)
-            user32.keybd_event(0x12, 0, 2, 0)
-        return True
-    except Exception:
-        return False
+    return _win32_check_and_focus_pagedesigner(focus=True)
 
 
 def _find_macos_pagedesigner_executable() -> tuple[Path | None, list[int]]:
@@ -451,9 +593,22 @@ def ensure_visible_pagedesigner(bring_to_front: bool = True) -> int:
         try:
             s = socket.create_connection(("127.0.0.1", port), timeout=1.0)
             s.close()
-            if bring_to_front:
-                bring_pagedesigner_to_front()
-            return port
+            if sys.platform == "win32":
+                # Verify that the running Page Designer actually has a visible window on WinSta0\Default!
+                if _win32_check_and_focus_pagedesigner(focus=bring_to_front):
+                    return port
+                # Otherwise, it was spawned on a hidden desktop (MainWindowHandle == 0) — kill & relaunch on WinSta0\Default
+                subprocess.run(
+                    ["taskkill", "/F", "/IM", "pagedesigner.exe"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                time.sleep(0.5)
+                break
+            else:
+                if bring_to_front:
+                    bring_pagedesigner_to_front()
+                return port
         except Exception:
             continue
 
@@ -505,9 +660,21 @@ def ensure_visible_pagedesigner(bring_to_front: bool = True) -> int:
     ]
     pd_exe = next((p for p in pd_candidates if p.exists()), None)
     if pd_exe is not None:
-        env = dict(os.environ, PAGEDESIGNER_CONTROL_PORT=str(PD_PORT))
-        subprocess.Popen([str(pd_exe), "--control", str(PD_PORT)], cwd=str(pd_exe.parent), env=env)
-        for _ in range(30):
+        if sys.platform == "win32":
+            subprocess.run(
+                ["taskkill", "/F", "/IM", "pagedesigner.exe"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            time.sleep(0.3)
+            launched = _win32_launch_pagedesigner_on_winsta0(pd_exe, PD_PORT)
+            if not launched:
+                env = dict(os.environ, PAGEDESIGNER_CONTROL_PORT=str(PD_PORT))
+                subprocess.Popen([str(pd_exe), "--control", str(PD_PORT)], cwd=str(pd_exe.parent), env=env)
+        else:
+            env = dict(os.environ, PAGEDESIGNER_CONTROL_PORT=str(PD_PORT))
+            subprocess.Popen([str(pd_exe), "--control", str(PD_PORT)], cwd=str(pd_exe.parent), env=env)
+        for _ in range(35):
             time.sleep(0.3)
             try:
                 s = socket.create_connection(("127.0.0.1", PD_PORT), timeout=1.0)
@@ -1100,14 +1267,20 @@ def run_live_step_by_step_build_in_pagedesigner(
 
                 ui_info = call("ui.inspect", {}).get("result", {})
                 active_docs = ui_info.get("documents", [])
+                active_idx = ui_info.get("activeDocument", -1)
+                expected_title = f"{cfg['combined_name']}.pagedesigner"
                 need_open = True
-                for d in active_docs:
-                    if Path(str(d.get("path", ""))).stem == cfg["combined_name"]:
-                        if d.get("active"):
-                            need_open = False
-                            break
+                if isinstance(active_idx, int) and 0 <= active_idx < len(active_docs):
+                    cur_title = str(active_docs[active_idx].get("title", "") or Path(str(active_docs[active_idx].get("path", ""))).name)
+                    if cur_title == expected_title or Path(cur_title).stem == cfg["combined_name"]:
+                        need_open = False
 
                 if need_open:
+                    for _ in range(len(active_docs)):
+                        try:
+                            call("app.close", {"discard": True})
+                        except Exception:
+                            break
                     call("engine.execute", {"command": "file.open", "params": {"path": str(combined_pd)}})
 
                 ui_state = call("ui.inspect", {}).get("result", {}).get("ui", {})
@@ -1118,7 +1291,7 @@ def run_live_step_by_step_build_in_pagedesigner(
                     call("engine.execute", {"command": "view.guides", "params": {}})
 
                 bring_pagedesigner_to_front()
-                time.sleep(0.10)
+                time.sleep(0.08)
 
                 for pnum in page_numbers:
                     if _CANCEL_CURRENT_ANIM.is_set():
@@ -1130,20 +1303,25 @@ def run_live_step_by_step_build_in_pagedesigner(
                     if not leaf_ids:
                         continue
 
+                    # Hide all items FIRST so the page opens 100% blank white from the very start!
+                    call("engine.execute", {"command": "object.setFlags", "params": {"ids": leaf_ids, "hidden": True}})
                     call("engine.execute", {"command": "view.goToPage", "params": {"page": pnum}})
                     call("engine.execute", {"command": "view.fitPage", "params": {}})
                     call("engine.execute", {"command": "edit.deselectAll", "params": {}})
+                    bring_pagedesigner_to_front()
+                    time.sleep(0.32)
 
-                    call("engine.execute", {"command": "object.setFlags", "params": {"ids": leaf_ids, "hidden": True}})
-                    time.sleep(0.18)
-
-                    chunk_sz = 2 if len(leaf_ids) > 110 else 1
+                    chunk_sz = 2 if len(leaf_ids) > 95 else 1
                     for i in range(0, len(leaf_ids), chunk_sz):
                         if _CANCEL_CURRENT_ANIM.is_set():
                             call("engine.execute", {"command": "object.setFlags", "params": {"ids": leaf_ids[i:], "hidden": False}})
                             break
                         batch_ids = leaf_ids[i : i + chunk_sz]
                         call("engine.execute", {"command": "object.setFlags", "params": {"ids": batch_ids, "hidden": False}})
+                        try:
+                            call("engine.execute", {"command": "object.select", "params": {"ids": [batch_ids[-1]]}})
+                        except Exception:
+                            pass
                         time.sleep(step_delay)
 
                     if first_head_id and not _CANCEL_CURRENT_ANIM.is_set():
@@ -1151,7 +1329,7 @@ def run_live_step_by_step_build_in_pagedesigner(
                             call("engine.execute", {"command": "object.select", "params": {"ids": [first_head_id]}})
                         except Exception:
                             pass
-                    time.sleep(0.15)
+                    time.sleep(0.18)
 
                 sock.close()
             except Exception as exc:
@@ -1188,6 +1366,12 @@ def run_live_trio_for_page(page_num: int, step_delay: float = 0.020):
                     with zipfile.ZipFile(combined_pd, "r") as zf:
                         doc = json.loads(zf.read("document.json").decode("utf-8"))
 
+                    ui_info = call("ui.inspect", {}).get("result", {})
+                    for _ in range(len(ui_info.get("documents", []))):
+                        try:
+                            call("app.close", {"discard": True})
+                        except Exception:
+                            break
                     call("engine.execute", {"command": "file.open", "params": {"path": str(combined_pd)}})
                     ui_state = call("ui.inspect", {}).get("result", {}).get("ui", {})
                     call("engine.execute", {"command": "view.screenMode", "params": {"mode": "normal"}})
@@ -1201,11 +1385,12 @@ def run_live_trio_for_page(page_num: int, step_delay: float = 0.020):
                         sp = doc["spreads"][page_num - 1]
                         leaf_ids, first_head_id = _collect_sorted_leaf_item_ids_and_first_headline(sp.get("items", []))
                         if leaf_ids:
+                            call("engine.execute", {"command": "object.setFlags", "params": {"ids": leaf_ids, "hidden": True}})
                             call("engine.execute", {"command": "view.goToPage", "params": {"page": page_num}})
                             call("engine.execute", {"command": "view.fitPage", "params": {}})
                             call("engine.execute", {"command": "edit.deselectAll", "params": {}})
-                            call("engine.execute", {"command": "object.setFlags", "params": {"ids": leaf_ids, "hidden": True}})
-                            time.sleep(0.14)
+                            bring_pagedesigner_to_front()
+                            time.sleep(0.28)
                             chunk_sz = 3 if len(leaf_ids) > 100 else 2
                             for i in range(0, len(leaf_ids), chunk_sz):
                                 if _CANCEL_CURRENT_ANIM.is_set():
@@ -1213,6 +1398,10 @@ def run_live_trio_for_page(page_num: int, step_delay: float = 0.020):
                                     break
                                 batch_ids = leaf_ids[i : i + chunk_sz]
                                 call("engine.execute", {"command": "object.setFlags", "params": {"ids": batch_ids, "hidden": False}})
+                                try:
+                                    call("engine.execute", {"command": "object.select", "params": {"ids": [batch_ids[-1]]}})
+                                except Exception:
+                                    pass
                                 time.sleep(step_delay)
                             if first_head_id and not _CANCEL_CURRENT_ANIM.is_set():
                                 try:
